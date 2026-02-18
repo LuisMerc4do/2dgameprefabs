@@ -29,18 +29,23 @@ export function CharacterCustomizer({ config, onChange }: CharacterCustomizerPro
       {/* Body Type */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-medium text-muted-foreground">Body Type</label>
-        <div className="flex gap-2">
-          {(["warrior", "scout"] as const).map((bt) => (
+        <div className="flex gap-2 flex-wrap">
+          {([
+            { id: "warrior", label: "Warrior" },
+            { id: "scout", label: "Scout" },
+            { id: "shieldmaiden", label: "Shieldmaiden" },
+            { id: "valkyrie", label: "Valkyrie" },
+          ] as const).map((bt) => (
             <button
-              key={bt}
-              onClick={() => onChange({ ...config, bodyType: bt })}
-              className={`flex-1 px-3 py-2 rounded-md text-xs font-medium capitalize transition-colors ${
-                config.bodyType === bt
+              key={bt.id}
+              onClick={() => onChange({ ...config, bodyType: bt.id })}
+              className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                config.bodyType === bt.id
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
             >
-              {bt}
+              {bt.label}
             </button>
           ))}
         </div>
@@ -49,7 +54,7 @@ export function CharacterCustomizer({ config, onChange }: CharacterCustomizerPro
       {/* Head Shape */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-medium text-muted-foreground">Head Shape</label>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {HEAD_STYLES.map((h) => (
             <button
               key={h.id}
@@ -69,7 +74,7 @@ export function CharacterCustomizer({ config, onChange }: CharacterCustomizerPro
       {/* Chest */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-medium text-muted-foreground">Chest Build</label>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {CHEST_STYLES.map((c) => (
             <button
               key={c.id}
@@ -89,7 +94,7 @@ export function CharacterCustomizer({ config, onChange }: CharacterCustomizerPro
       {/* Legs */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-medium text-muted-foreground">Leg Build</label>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {LEG_STYLES.map((l) => (
             <button
               key={l.id}

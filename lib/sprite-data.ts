@@ -2,7 +2,7 @@
 // NORSE RPG SPRITE LIBRARY - DATA DEFINITIONS v2
 // ============================================================
 
-export type BodyType = "warrior" | "scout"
+export type BodyType = "warrior" | "scout" | "shieldmaiden" | "valkyrie"
 
 export interface SkinPalette {
   id: string; name: string; base: string; shadow: string; highlight: string
@@ -27,7 +27,7 @@ export interface EquipmentItem {
 
 export interface Monster {
   id: string; name: string; role: string
-  difficulty: "Easy" | "Easy-Medium" | "Medium" | "Medium-High"
+  difficulty: "Easy" | "Easy-Medium" | "Medium" | "Medium-High" | "Hard" | "Boss"
   description: string; inspiration: string
 }
 
@@ -75,6 +75,12 @@ export const HAIR_STYLES: HairStyle[] = [
   { id: "topknot", name: "Top Knot", defaultColor: "#6B3A2A" },
   { id: "wild", name: "Wild Mane", defaultColor: "#B33A1A" },
   { id: "shaved-sides", name: "Shaved Sides", defaultColor: "#2A1A0A" },
+  { id: "twin-braids", name: "Twin Braids", defaultColor: "#E8D44D" },
+  { id: "flowing", name: "Flowing", defaultColor: "#8B4513" },
+  { id: "undercut", name: "Undercut", defaultColor: "#2A1A0A" },
+  { id: "crown-braid", name: "Crown Braid", defaultColor: "#B87333" },
+  { id: "ponytail", name: "Ponytail", defaultColor: "#6B3A2A" },
+  { id: "sideswept", name: "Side Swept", defaultColor: "#E8D44D" },
   { id: "bald", name: "Bald", defaultColor: "transparent" },
 ]
 
@@ -85,16 +91,30 @@ export const HEAD_STYLES: HeadStyle[] = [
   { id: "round", name: "Round" },
   { id: "square", name: "Square" },
   { id: "angular", name: "Angular" },
+  { id: "oval", name: "Oval" },
+  { id: "heart", name: "Heart" },
+  { id: "diamond", name: "Diamond" },
+  { id: "soft", name: "Soft" },
+  { id: "fierce", name: "Fierce" },
 ]
 
 export const CHEST_STYLES: ChestStyle[] = [
   { id: "broad", name: "Broad" },
   { id: "slim", name: "Slim" },
+  { id: "athletic", name: "Athletic" },
+  { id: "curvy", name: "Curvy" },
+  { id: "stocky", name: "Stocky" },
+  { id: "lithe", name: "Lithe" },
+  { id: "toned", name: "Toned" },
 ]
 
 export const LEG_STYLES: LegStyle[] = [
   { id: "normal", name: "Normal" },
   { id: "muscular", name: "Muscular" },
+  { id: "slender", name: "Slender" },
+  { id: "armored", name: "Armored" },
+  { id: "agile", name: "Agile" },
+  { id: "tall", name: "Tall" },
 ]
 
 // ============================================================
@@ -106,6 +126,9 @@ export const BEARD_STYLES: BeardStyle[] = [
   { id: "short", name: "Short Beard" },
   { id: "long", name: "Long Beard" },
   { id: "braided-beard", name: "Braided Beard" },
+  { id: "forked", name: "Forked Beard" },
+  { id: "goatee", name: "Goatee" },
+  { id: "full-viking", name: "Full Viking" },
 ]
 
 // ============================================================
@@ -125,9 +148,13 @@ export const EYE_COLORS: EyeColorOption[] = [
 // ============================================================
 export const SCAR_OPTIONS: ScarOption[] = [
   { id: "none", name: "None" },
-  { id: "left-eye", name: "Left Eye Scar" },
-  { id: "right-cheek", name: "Right Cheek" },
-  { id: "cross-face", name: "Cross Face" },
+  { id: "left-eye", name: "Left Eye Slash" },
+  { id: "right-cheek", name: "Claw Marks" },
+  { id: "cross-face", name: "X-Scar" },
+  { id: "jaw-slash", name: "Jaw Slash" },
+  { id: "blind-eye", name: "Blind Eye" },
+  { id: "forehead-brand", name: "Rune Brand" },
+  { id: "war-wound", name: "War Wound" },
 ]
 
 // ============================================================
@@ -153,6 +180,11 @@ export const HELMETS: EquipmentItem[] = [
   { id: "wolf-skull", name: "Wolf Skull Helm", slot: "helmet", description: "Fearsome wolf skull mounted on iron", rarity: "epic" },
   { id: "valkyrie-wing", name: "Valkyrie Wing Helm", slot: "helmet", description: "Winged helm blessed by the Valkyries", rarity: "legendary" },
   { id: "dragonbone", name: "Dragonbone Crown", slot: "helmet", description: "Ancient crown carved from dragon bone with horns", rarity: "legendary" },
+  { id: "einherjar-crown", name: "Einherjar Crown", slot: "helmet", description: "Golden crown of fallen warriors, glows with Valhalla's light", rarity: "legendary" },
+  { id: "frost-giant-skull", name: "Frost Giant Skull", slot: "helmet", description: "A massive Jotunn skull fragment, radiating cold", rarity: "epic" },
+  { id: "serpent-coil", name: "Serpent Coil Helm", slot: "helmet", description: "Helm shaped like Jormungandr coiling around the head", rarity: "rare" },
+  { id: "shadow-hood", name: "Shadow Hood", slot: "helmet", description: "Enchanted dark hood that obscures the face in shadow", rarity: "uncommon" },
+  { id: "thorn-crown", name: "Thorn Crown", slot: "helmet", description: "Crown of blackened thorns, dripping with dark magic", rarity: "epic" },
 ]
 
 export const CHEST_ARMOR: EquipmentItem[] = [
@@ -164,6 +196,11 @@ export const CHEST_ARMOR: EquipmentItem[] = [
   { id: "bone-cuirass", name: "Bone Cuirass", slot: "chest", description: "Armor crafted from ancient beast bones", rarity: "epic" },
   { id: "stormweave", name: "Stormweave Hauberk", slot: "chest", description: "Woven with lightning magic for shock damage", rarity: "legendary" },
   { id: "bloodforge-mail", name: "Bloodforge Mail", slot: "chest", description: "Blood-tempered iron with dark rune engravings", rarity: "legendary" },
+  { id: "fenrir-hide", name: "Fenrir Hide Armor", slot: "chest", description: "Dark wolf pelt armor with spectral shimmer", rarity: "epic" },
+  { id: "valhalla-plate", name: "Valhalla Plate", slot: "chest", description: "Gleaming golden plate blessed by Odin himself", rarity: "legendary" },
+  { id: "frost-warden", name: "Frost Warden Coat", slot: "chest", description: "Ice-infused plate mail that freezes attackers", rarity: "rare" },
+  { id: "shadow-cloak", name: "Shadow Cloak", slot: "chest", description: "Cloak woven from shadows, makes wearer nearly invisible", rarity: "epic" },
+  { id: "dragonscale-mail", name: "Dragonscale Mail", slot: "chest", description: "Iridescent scales from Nidhoggr, nearly indestructible", rarity: "legendary" },
 ]
 
 export const GLOVES: EquipmentItem[] = [
@@ -175,6 +212,11 @@ export const GLOVES: EquipmentItem[] = [
   { id: "spiked-fists", name: "Spiked Iron Fists", slot: "gloves", description: "Iron gauntlets with protruding spikes", rarity: "epic" },
   { id: "dragonscale-grips", name: "Dragonscale Grips", slot: "gloves", description: "Gauntlets layered with dragon scales", rarity: "legendary" },
   { id: "ember-wraps", name: "Ember Wraps", slot: "gloves", description: "Fire-enchanted wraps that smolder with heat", rarity: "legendary" },
+  { id: "frost-claws", name: "Frost Claws", slot: "gloves", description: "Ice-crystal claws that extend from gauntlets", rarity: "epic" },
+  { id: "valhalla-grips", name: "Valhalla Grips", slot: "gloves", description: "Golden gauntlets blessed for eternal battle", rarity: "legendary" },
+  { id: "shadow-wraps", name: "Shadow Wraps", slot: "gloves", description: "Wrappings that trail dark wisps", rarity: "rare" },
+  { id: "bone-knuckles", name: "Bone Knuckles", slot: "gloves", description: "Knuckle guards carved from giant bone", rarity: "uncommon" },
+  { id: "thunder-fists", name: "Thunder Fists", slot: "gloves", description: "Gauntlets that crackle with Thor's lightning", rarity: "legendary" },
 ]
 
 export const PANTS: EquipmentItem[] = [
@@ -186,6 +228,11 @@ export const PANTS: EquipmentItem[] = [
   { id: "iron-chain-skirt", name: "Iron Chain Skirt", slot: "pants", description: "Chainmail lower armor for maximum protection", rarity: "epic" },
   { id: "shadow-leggings", name: "Shadow Leggings", slot: "pants", description: "Dark enchanted leggings that blend with darkness", rarity: "legendary" },
   { id: "flame-guards", name: "Flame Guard Greaves", slot: "pants", description: "Fire-enchanted leg armor with ember glow", rarity: "legendary" },
+  { id: "bone-skirt", name: "Bone War Skirt", slot: "pants", description: "Battle skirt made from interlocking bones", rarity: "epic" },
+  { id: "valhalla-guards", name: "Valhalla Leg Guards", slot: "pants", description: "Golden-plated divine leg armor", rarity: "legendary" },
+  { id: "wolf-hide", name: "Wolf Hide Leggings", slot: "pants", description: "Dark wolf pelt wrappings for stealth", rarity: "rare" },
+  { id: "thunder-greaves", name: "Thunder Greaves", slot: "pants", description: "Lightning-charged leg plates", rarity: "epic" },
+  { id: "ice-bound", name: "Ice-Bound Legwraps", slot: "pants", description: "Frost-enchanted wrappings with crystal shards", rarity: "rare" },
 ]
 
 export const BOOTS: EquipmentItem[] = [
@@ -197,6 +244,11 @@ export const BOOTS: EquipmentItem[] = [
   { id: "bone-treads", name: "Bone Tread Boots", slot: "boots", description: "Boots reinforced with ancient bone plates", rarity: "epic" },
   { id: "flamestep", name: "Flamestep Boots", slot: "boots", description: "Leaves fiery footprints in your wake", rarity: "legendary" },
   { id: "shadow-step", name: "Shadow Step Boots", slot: "boots", description: "Phase through shadows with each step", rarity: "legendary" },
+  { id: "valhalla-treads", name: "Valhalla Treads", slot: "boots", description: "Golden boots that never tire", rarity: "legendary" },
+  { id: "ice-spiked", name: "Ice-Spiked Boots", slot: "boots", description: "Boots with protruding ice crystals for traction", rarity: "rare" },
+  { id: "wolf-paw", name: "Wolf Paw Boots", slot: "boots", description: "Boots shaped like wolf paws, for silent movement", rarity: "epic" },
+  { id: "thunder-striders", name: "Thunder Striders", slot: "boots", description: "Boots that crackle with each footfall", rarity: "epic" },
+  { id: "root-walkers", name: "Yggdrasil Root Walkers", slot: "boots", description: "Living wood boots grown from the World Tree", rarity: "legendary" },
 ]
 
 export const WEAPONS: EquipmentItem[] = [
@@ -210,6 +262,11 @@ export const WEAPONS: EquipmentItem[] = [
   { id: "thunder-mace", name: "Thunder Mace", slot: "weapon", description: "Lightning-infused flanged mace", rarity: "epic" },
   { id: "shield-of-odin", name: "Shield of Odin", slot: "weapon", description: "Ancient round shield with runic protection", rarity: "legendary" },
   { id: "ragnarok-greatsword", name: "Ragnarok Greatsword", slot: "weapon", description: "Massive rune-etched blade of world-ending power", rarity: "legendary" },
+  { id: "gungnir-spear", name: "Gungnir", slot: "weapon", description: "Odin's legendary spear that never misses", rarity: "legendary" },
+  { id: "mjolnir", name: "Mjolnir", slot: "weapon", description: "Thor's hammer, the most iconic weapon in Norse mythology", rarity: "legendary" },
+  { id: "ice-staff", name: "Staff of Niflheim", slot: "weapon", description: "Frost staff channeling the primordial cold", rarity: "epic" },
+  { id: "shadow-daggers", name: "Loki's Shadow Daggers", slot: "weapon", description: "Twin daggers that shimmer between dimensions", rarity: "epic" },
+  { id: "yggdrasil-staff", name: "Yggdrasil Branch", slot: "weapon", description: "Living branch from the World Tree, pulsing with life magic", rarity: "legendary" },
 ]
 
 export const ALL_EQUIPMENT = {
@@ -235,6 +292,25 @@ export const MONSTERS: Monster[] = [
   { id: "valkyrie-shade", name: "Valkyrie Shade", role: "Aerial fighter", difficulty: "Medium", description: "A ghostly warrior-maiden who swoops from above with spectral wings and gleaming spear.", inspiration: "Valkyrie" },
   { id: "nidhoggr-spawn", name: "Nidhoggr Spawn", role: "Poison enemy", difficulty: "Medium", description: "A serpentine wyrmling with venomous fangs and horned crest. Venom drips from its maw.", inspiration: "Nidhoggr" },
   { id: "cultist-loki", name: "Cultist of Loki", role: "Trick enemy", difficulty: "Medium", description: "A deceptive foe in a dark green cloak bearing Loki's trickster symbol. Creates illusions and fights with hidden daggers.", inspiration: "Loki" },
+  { id: "hel-revenant", name: "Hel Revenant", role: "Undead caster", difficulty: "Medium-High", description: "A skeletal mage from Helheim wreathed in green death-flame. Casts necrotic bolts and raises lesser undead.", inspiration: "Hel / Norse underworld" },
+  { id: "fire-jotunn", name: "Fire Jotunn", role: "Elite brute (fire)", difficulty: "Hard", description: "A towering fire giant from Muspelheim wreathed in flame. Massive burning sword and molten skin.", inspiration: "Muspelheim fire giants" },
+  { id: "troll-berserker", name: "Mountain Troll", role: "Slow heavy hitter", difficulty: "Easy-Medium", description: "A hulking green troll with a stone club. Slow but devastating hits, vulnerable to fire.", inspiration: "Norse trolls" },
+  { id: "rune-golem", name: "Rune Golem", role: "Armored construct", difficulty: "Medium", description: "A stone golem animated by glowing Norse runes. Nearly impervious to physical attacks.", inspiration: "Norse runic magic" },
+  { id: "dark-elf", name: "Svartalfar Assassin", role: "Stealth melee", difficulty: "Medium-High", description: "A dark elf from Svartalfheim cloaked in shadow. Twin daggers and vanishing strikes.", inspiration: "Dark elves / Svartalfheim" },
+  { id: "kraken-spawn", name: "Kraken Spawn", role: "Tentacle enemy", difficulty: "Medium", description: "A writhing mass of tentacles from the deep sea. Grabs and constricts prey.", inspiration: "Norse sea monsters" },
+  { id: "yggdrasil-ent", name: "Yggdrasil Ent", role: "Forest guardian", difficulty: "Easy-Medium", description: "An ancient tree spirit animated by the World Tree's power. Slow but extremely tough.", inspiration: "Yggdrasil" },
+  { id: "fenrir-alpha", name: "Fenrir the World Ender", role: "BOSS - Giant wolf", difficulty: "Boss", description: "The legendary wolf Fenrir, chained no more. Massive spectral wolf with cosmic fury, moon in its jaws.", inspiration: "Fenrir" },
+  { id: "surtr-the-destroyer", name: "Surtr the Fire Lord", role: "BOSS - Fire giant king", difficulty: "Boss", description: "The ruler of Muspelheim wielding a flaming greatsword. Towers over all with a crown of eternal flame.", inspiration: "Surtr / Ragnarok" },
+  { id: "burial-wight", name: "Burial Wight", role: "Slow shambler", difficulty: "Easy", description: "A decayed corpse dragged from a barrow mound, wrapped in tattered grave-cloth. Lunges with bony claws.", inspiration: "Norse burial mounds" },
+  { id: "ice-sprite", name: "Ice Sprite", role: "Small ranged nuisance", difficulty: "Easy", description: "A tiny mischievous frost spirit with crystalline wings. Pelts intruders with shards of ice.", inspiration: "Nordic frost faeries" },
+  { id: "einherjar-ghost", name: "Einherjar Ghost", role: "Armored melee", difficulty: "Easy-Medium", description: "The faded spirit of a Valhalla warrior. Still clad in spectral armor and wielding a translucent sword.", inspiration: "Valhalla / Einherjar" },
+  { id: "mire-serpent", name: "Mire Serpent", role: "Ambush striker", difficulty: "Medium", description: "A venomous marsh snake that lurks half-submerged. Strikes with blinding speed and retreats into murky water.", inspiration: "Norse swamp beasts" },
+  { id: "norns-shade", name: "Norn Shade", role: "Debuff caster", difficulty: "Medium", description: "A ghostly echo of the fate-weavers. Wraps enemies in threads of destiny that slow and weaken them.", inspiration: "The Norns / Fate" },
+  { id: "wulver", name: "Wulver", role: "Fast melee berserker", difficulty: "Medium", description: "A wolf-headed humanoid warrior that fights with savage claws. Hunts in small packs.", inspiration: "Norse werewolf / God of War wolf warriors" },
+  { id: "tatzelwurm", name: "Tatzelwurm", role: "Lunging serpent", difficulty: "Medium", description: "A cat-faced serpent that leaps from rock ledges. Venomous bite and constricting tail.", inspiration: "Norse lindworm / alpine dragon" },
+  { id: "revenant-archer", name: "Revenant Archer", role: "Ranged undead", difficulty: "Medium", description: "A skeletal bowman wreathed in blue soulfire. Fires spectral arrows from a bone longbow.", inspiration: "Draugr archers / Hel's army" },
+  { id: "nightstalker", name: "Nightstalker", role: "Shadow ambusher", difficulty: "Medium", description: "A living shadow with glowing red eyes. Emerges from darkness to strike then fades away.", inspiration: "Norse shadow spirits / dark elves" },
+  { id: "rock-giant", name: "Rock Giant", role: "Slow tanky brute", difficulty: "Medium", description: "A towering figure of stacked boulders animated by ancient magic. Hurls stones from range.", inspiration: "Norse stone giants / jotnar" },
 ]
 
 // ============================================================
