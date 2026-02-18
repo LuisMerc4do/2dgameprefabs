@@ -57,7 +57,7 @@ function lighten(hex: string, amount: number = 30): string {
 // ============================================================
 
 export interface CharacterConfig {
-  bodyType: "warrior" | "scout"
+  bodyType: "warrior" | "scout" | "shieldmaiden" | "valkyrie"
   headStyle: string
   chestStyle: string
   legStyle: string
@@ -97,7 +97,8 @@ export function drawCharacter(
   ctx.translate(offsetX, offsetY)
 
   const { bodyType, headStyle, skinBase, skinShadow, skinHighlight, hairStyle, hairColor, chestStyle, legStyle, beardStyle, eyeColor, scarStyle, facePaint } = config
-  const isWide = bodyType === "warrior" || chestStyle === "broad"
+  const isFemale = bodyType === "shieldmaiden" || bodyType === "valkyrie"
+  const isWide = bodyType === "warrior" || bodyType === "valkyrie" || chestStyle === "broad" || chestStyle === "stocky"
 
   // Ground shadow
   groundShadow(ctx, 24, 47, 10, 2, scale)
@@ -187,6 +188,44 @@ function drawHead(ctx: Ctx, style: string, base: string, shad: string, hi: strin
       rect(ctx, 15, 16, 3, 4, shad, s)
       rect(ctx, 30, 16, 3, 4, shad, s)
       break
+    case "oval":
+      // Softer, elongated oval shape
+      rect(ctx, 16, 4, 16, 17, base, s)
+      rect(ctx, 15, 6, 1, 12, base, s)
+      rect(ctx, 32, 6, 1, 12, base, s)
+      rect(ctx, 17, 3, 14, 1, base, s)
+      rect(ctx, 17, 21, 14, 1, base, s)
+      outline(ctx, 16, 4, 16, 17, ol, s)
+      rect(ctx, 17, 4, 14, 3, hi, s)
+      rect(ctx, 17, 18, 14, 3, shad, s)
+      break
+    case "heart":
+      // Wider forehead tapering to chin
+      rect(ctx, 14, 5, 20, 10, base, s)
+      rect(ctx, 16, 15, 16, 4, base, s)
+      rect(ctx, 18, 19, 12, 2, base, s)
+      rect(ctx, 20, 21, 8, 1, base, s)
+      outline(ctx, 14, 5, 20, 10, ol, s)
+      rect(ctx, 16, 15, 16, 1, ol, s)
+      rect(ctx, 14, 5, 20, 3, hi, s)
+      rect(ctx, 20, 19, 8, 2, shad, s)
+      // Soft cheek highlights
+      rect(ctx, 15, 10, 2, 3, hi + "60", s)
+      rect(ctx, 31, 10, 2, 3, hi + "60", s)
+      break
+    case "diamond":
+      // Narrow top/bottom, wide cheekbones
+      rect(ctx, 18, 4, 12, 4, base, s)
+      rect(ctx, 15, 8, 18, 8, base, s)
+      rect(ctx, 17, 16, 14, 4, base, s)
+      rect(ctx, 19, 20, 10, 2, base, s)
+      outline(ctx, 15, 8, 18, 8, ol, s)
+      rect(ctx, 18, 4, 12, 3, hi, s)
+      rect(ctx, 19, 18, 10, 2, shad, s)
+      // Sharp cheekbone highlights
+      rect(ctx, 15, 9, 3, 2, hi + "60", s)
+      rect(ctx, 30, 9, 3, 2, hi + "60", s)
+      break
     default: // round
       rect(ctx, 15, 6, 18, 14, base, s)
       rect(ctx, 16, 5, 16, 1, base, s)
@@ -256,6 +295,41 @@ function drawBeard(ctx: Ctx, style: string, color: string, s: number) {
       rect(ctx, 24, 24, 3, 1, "#8B7355", s)
       rect(ctx, 19, 17, 10, 1, lighten(color, 15), s)
       break
+    case "forked":
+      // Forked beard — splits into two points
+      rect(ctx, 18, 17, 12, 4, color, s)
+      rect(ctx, 19, 21, 4, 5, color, s)
+      rect(ctx, 25, 21, 4, 5, color, s)
+      rect(ctx, 20, 25, 2, 2, color, s) // left fork tip
+      rect(ctx, 26, 25, 2, 2, color, s) // right fork tip
+      rect(ctx, 19, 17, 10, 1, lighten(color, 15), s)
+      rect(ctx, 19, 20, 4, 1, dark, s)
+      rect(ctx, 25, 20, 4, 1, dark, s)
+      break
+    case "goatee":
+      // Small pointed goatee
+      rect(ctx, 22, 17, 4, 4, color, s)
+      rect(ctx, 23, 21, 2, 3, color, s)
+      px(ctx, 23, 23, dark, s) // tip
+      rect(ctx, 22, 17, 4, 1, lighten(color, 15), s)
+      break
+    case "full-viking":
+      // Massive full beard — wild and thick
+      rect(ctx, 16, 16, 16, 5, color, s)
+      rect(ctx, 17, 21, 14, 4, color, s)
+      rect(ctx, 18, 25, 12, 3, color, s)
+      rect(ctx, 20, 28, 8, 2, color, s)
+      // Beard shading
+      rect(ctx, 16, 16, 16, 2, lighten(color, 15), s)
+      rect(ctx, 18, 24, 12, 1, dark, s)
+      rect(ctx, 20, 27, 8, 1, dark, s)
+      // Wild strands
+      px(ctx, 15, 18, color, s); px(ctx, 32, 18, color, s)
+      px(ctx, 16, 22, dark, s); px(ctx, 31, 22, dark, s)
+      // Braid beads
+      rect(ctx, 20, 28, 2, 1, "#D4A44A", s)
+      rect(ctx, 26, 28, 2, 1, "#D4A44A", s)
+      break
   }
 }
 
@@ -311,9 +385,77 @@ function drawFacePaint(ctx: Ctx, style: string, s: number) {
 }
 
 function drawTorso(ctx: Ctx, bodyType: string, chestStyle: string, base: string, shad: string, hi: string, s: number) {
-  const isWide = bodyType === "warrior" || chestStyle === "broad"
+  const isFemale = bodyType === "shieldmaiden" || bodyType === "valkyrie"
+  const isWide = bodyType === "warrior" || bodyType === "valkyrie" || chestStyle === "broad" || chestStyle === "stocky"
   const ol = darken(shad, 30)
-  if (isWide) {
+
+  if (isFemale && chestStyle === "curvy") {
+    // Curvy female torso — wider hips, defined bust
+    rect(ctx, 13, 21, 22, 12, base, s)
+    outline(ctx, 13, 21, 22, 12, ol, s)
+    rect(ctx, 13, 21, 22, 3, hi, s)
+    rect(ctx, 13, 30, 22, 3, shad, s)
+    // Bust shading
+    rect(ctx, 16, 22, 6, 3, shad + "50", s)
+    rect(ctx, 26, 22, 6, 3, shad + "50", s)
+    rect(ctx, 17, 22, 4, 2, hi + "40", s)
+    rect(ctx, 27, 22, 4, 2, hi + "40", s)
+    // Waist narrowing
+    rect(ctx, 14, 26, 1, 3, shad + "30", s)
+    rect(ctx, 33, 26, 1, 3, shad + "30", s)
+    // Navel
+    px(ctx, 24, 30, shad, s)
+    // Loincloth / skirt
+    rect(ctx, 16, 32, 16, 2, "#4A3A2A", s)
+    rect(ctx, 16, 32, 16, 1, "#5A4A3A", s)
+  } else if (isFemale) {
+    // Athletic female torso
+    const x = isWide ? 12 : 14
+    const w = isWide ? 24 : 20
+    rect(ctx, x, 21, w, 12, base, s)
+    outline(ctx, x, 21, w, 12, ol, s)
+    rect(ctx, x, 21, w, 3, hi, s)
+    rect(ctx, x, 30, w, 3, shad, s)
+    // Subtle bust definition
+    rect(ctx, x + 3, 22, 5, 2, shad + "40", s)
+    rect(ctx, x + w - 8, 22, 5, 2, shad + "40", s)
+    rect(ctx, x + 4, 22, 3, 1, hi + "30", s)
+    rect(ctx, x + w - 7, 22, 3, 1, hi + "30", s)
+    // Waist definition
+    rect(ctx, x + 1, 27, 1, 3, shad + "30", s)
+    rect(ctx, x + w - 2, 27, 1, 3, shad + "30", s)
+    px(ctx, 24, 30, shad, s)
+    rect(ctx, 17, 32, 14, 2, "#4A3A2A", s)
+    rect(ctx, 17, 32, 14, 1, "#5A4A3A", s)
+  } else if (chestStyle === "athletic") {
+    // Athletic male — moderate width with defined muscle
+    rect(ctx, 13, 21, 22, 12, base, s)
+    outline(ctx, 13, 21, 22, 12, ol, s)
+    rect(ctx, 13, 21, 22, 3, hi, s)
+    rect(ctx, 13, 30, 22, 3, shad, s)
+    rect(ctx, 20, 23, 1, 5, shad + "60", s)
+    rect(ctx, 27, 23, 1, 5, shad + "60", s)
+    // V-shape definition
+    rect(ctx, 15, 22, 6, 1, shad + "40", s)
+    rect(ctx, 27, 22, 6, 1, shad + "40", s)
+    rect(ctx, 21, 27, 6, 1, shad + "40", s)
+    px(ctx, 24, 30, shad, s)
+    rect(ctx, 17, 32, 14, 2, "#4A3A2A", s)
+    rect(ctx, 17, 32, 14, 1, "#5A4A3A", s)
+  } else if (chestStyle === "stocky") {
+    // Stocky — wide and thick
+    rect(ctx, 10, 21, 28, 13, base, s)
+    outline(ctx, 10, 21, 28, 13, ol, s)
+    rect(ctx, 10, 21, 28, 3, hi, s)
+    rect(ctx, 10, 31, 28, 3, shad, s)
+    rect(ctx, 20, 23, 1, 6, shad, s)
+    rect(ctx, 27, 23, 1, 6, shad, s)
+    rect(ctx, 14, 22, 8, 2, shad + "60", s)
+    rect(ctx, 26, 22, 8, 2, shad + "60", s)
+    px(ctx, 24, 31, shad, s)
+    rect(ctx, 15, 33, 18, 2, "#4A3A2A", s)
+    rect(ctx, 15, 33, 18, 1, "#5A4A3A", s)
+  } else if (isWide) {
     rect(ctx, 11, 21, 26, 12, base, s)
     outline(ctx, 11, 21, 26, 12, ol, s)
     rect(ctx, 11, 21, 26, 3, hi, s)
@@ -348,7 +490,7 @@ function drawTorso(ctx: Ctx, bodyType: string, chestStyle: string, base: string,
 
 function drawArms(ctx: Ctx, bodyType: string, base: string, shad: string, hi: string, s: number) {
   const ol = darken(shad, 30)
-  if (bodyType === "warrior") {
+  if (bodyType === "warrior" || bodyType === "valkyrie") {
     // Left arm
     rect(ctx, 6, 21, 5, 14, base, s)
     rect(ctx, 6, 21, 5, 3, hi, s)
@@ -388,19 +530,41 @@ function drawArms(ctx: Ctx, bodyType: string, base: string, shad: string, hi: st
 function drawLegs(ctx: Ctx, style: string, base: string, shad: string, hi: string, s: number) {
   const ol = darken(shad, 30)
   if (style === "muscular") {
-    // Left leg
     rect(ctx, 14, 33, 8, 10, base, s)
     rect(ctx, 14, 33, 8, 2, hi, s)
     rect(ctx, 14, 41, 8, 2, shad, s)
     outline(ctx, 14, 33, 8, 10, ol, s)
-    // Thigh highlight
     rect(ctx, 15, 34, 5, 2, hi + "60", s)
-    // Right leg
     rect(ctx, 26, 33, 8, 10, base, s)
     rect(ctx, 26, 33, 8, 2, hi, s)
     rect(ctx, 26, 41, 8, 2, shad, s)
     outline(ctx, 26, 33, 8, 10, ol, s)
     rect(ctx, 27, 34, 5, 2, hi + "60", s)
+  } else if (style === "slender") {
+    // Slender legs — narrower, elegant
+    rect(ctx, 17, 33, 5, 10, base, s)
+    rect(ctx, 17, 33, 5, 2, hi, s)
+    rect(ctx, 17, 41, 5, 2, shad, s)
+    outline(ctx, 17, 33, 5, 10, ol, s)
+    rect(ctx, 26, 33, 5, 10, base, s)
+    rect(ctx, 26, 33, 5, 2, hi, s)
+    rect(ctx, 26, 41, 5, 2, shad, s)
+    outline(ctx, 26, 33, 5, 10, ol, s)
+  } else if (style === "armored") {
+    // Armored legs — with built-in plate look
+    rect(ctx, 15, 33, 7, 10, base, s)
+    rect(ctx, 15, 33, 7, 2, hi, s)
+    rect(ctx, 15, 41, 7, 2, shad, s)
+    outline(ctx, 15, 33, 7, 10, ol, s)
+    rect(ctx, 26, 33, 7, 10, base, s)
+    rect(ctx, 26, 33, 7, 2, hi, s)
+    rect(ctx, 26, 41, 7, 2, shad, s)
+    outline(ctx, 26, 33, 7, 10, ol, s)
+    // Plate highlights
+    rect(ctx, 16, 35, 2, 1, hi + "50", s)
+    rect(ctx, 27, 35, 2, 1, hi + "50", s)
+    rect(ctx, 16, 38, 2, 1, shad + "40", s)
+    rect(ctx, 27, 38, 2, 1, shad + "40", s)
   } else {
     rect(ctx, 16, 33, 6, 10, base, s)
     rect(ctx, 16, 33, 6, 2, hi, s)
@@ -480,9 +644,100 @@ function drawHair(ctx: Ctx, style: string, color: string, s: number) {
     case "shaved-sides":
       rect(ctx, 18, 2, 12, 6, color, s)
       rect(ctx, 19, 2, 10, 2, hi, s)
-      rect(ctx, 15, 5, 3, 3, dark + "60", s) // stubble left
-      rect(ctx, 30, 5, 3, 3, dark + "60", s) // stubble right
+      rect(ctx, 15, 5, 3, 3, dark + "60", s)
+      rect(ctx, 30, 5, 3, 3, dark + "60", s)
       rect(ctx, 18, 7, 12, 1, dark, s)
+      break
+    case "twin-braids":
+      // Top hair
+      rect(ctx, 15, 2, 18, 6, color, s)
+      rect(ctx, 16, 2, 16, 2, hi, s)
+      rect(ctx, 15, 7, 18, 1, dark, s)
+      // Twin braids hanging down both sides
+      rect(ctx, 11, 8, 3, 22, color, s)
+      rect(ctx, 34, 8, 3, 22, color, s)
+      // Braid ties at intervals
+      rect(ctx, 11, 12, 3, 1, "#8B7355", s)
+      rect(ctx, 34, 12, 3, 1, "#8B7355", s)
+      rect(ctx, 11, 18, 3, 1, "#8B7355", s)
+      rect(ctx, 34, 18, 3, 1, "#8B7355", s)
+      rect(ctx, 11, 24, 3, 1, "#D4A44A", s)
+      rect(ctx, 34, 24, 3, 1, "#D4A44A", s)
+      rect(ctx, 11, 29, 3, 1, "#D4A44A", s)
+      rect(ctx, 34, 29, 3, 1, "#D4A44A", s)
+      break
+    case "flowing":
+      // Full flowing hair cascading past shoulders
+      rect(ctx, 14, 1, 20, 7, color, s)
+      rect(ctx, 15, 1, 18, 2, hi, s)
+      rect(ctx, 12, 5, 3, 20, color, s)
+      rect(ctx, 33, 5, 3, 20, color, s)
+      // Long flowing strands
+      rect(ctx, 11, 18, 3, 14, color, s)
+      rect(ctx, 34, 18, 3, 14, color, s)
+      rect(ctx, 10, 24, 2, 8, dark, s)
+      rect(ctx, 36, 24, 2, 8, dark, s)
+      // Volume on top
+      rect(ctx, 13, 2, 2, 5, dark + "40", s)
+      rect(ctx, 33, 2, 2, 5, dark + "40", s)
+      rect(ctx, 14, 7, 20, 1, dark, s)
+      break
+    case "undercut":
+      // Long on top, very short sides
+      rect(ctx, 17, 0, 14, 8, color, s)
+      rect(ctx, 18, 0, 12, 2, hi, s)
+      // Swept to one side
+      rect(ctx, 30, 2, 4, 6, color, s)
+      rect(ctx, 32, 4, 3, 4, dark, s)
+      // Stubble sides
+      rect(ctx, 15, 5, 2, 4, dark + "40", s)
+      rect(ctx, 33, 5, 2, 4, dark + "40", s)
+      rect(ctx, 17, 7, 14, 1, dark, s)
+      break
+    case "crown-braid":
+      // Braided crown circling the head
+      rect(ctx, 15, 2, 18, 5, color, s)
+      rect(ctx, 16, 2, 16, 2, hi, s)
+      // Crown braid wrapping around
+      rect(ctx, 14, 4, 20, 3, color, s)
+      rect(ctx, 13, 5, 1, 3, color, s)
+      rect(ctx, 34, 5, 1, 3, color, s)
+      // Braid pattern on crown
+      for (let i = 14; i < 34; i += 3) {
+        px(ctx, i, 5, dark, s)
+        px(ctx, i + 1, 4, hi, s)
+      }
+      // Ties
+      rect(ctx, 14, 6, 1, 1, "#D4A44A", s)
+      rect(ctx, 33, 6, 1, 1, "#D4A44A", s)
+      rect(ctx, 15, 7, 18, 1, dark, s)
+      break
+    case "ponytail":
+      // Pulled back with ponytail
+      rect(ctx, 15, 2, 18, 6, color, s)
+      rect(ctx, 16, 2, 16, 2, hi, s)
+      rect(ctx, 15, 7, 18, 1, dark, s)
+      // Ponytail flowing back
+      rect(ctx, 14, 5, 3, 4, color, s)
+      rect(ctx, 31, 5, 3, 4, color, s)
+      // Tail
+      rect(ctx, 12, 8, 3, 16, color, s)
+      rect(ctx, 12, 10, 3, 1, "#8B7355", s) // tie
+      rect(ctx, 11, 20, 3, 4, dark, s) // tip
+      break
+    case "sideswept":
+      // Swept to one side, covering one eye slightly
+      rect(ctx, 14, 1, 20, 7, color, s)
+      rect(ctx, 15, 1, 18, 2, hi, s)
+      // Long side sweep to the right
+      rect(ctx, 31, 4, 5, 10, color, s)
+      rect(ctx, 33, 8, 4, 8, color, s)
+      rect(ctx, 34, 12, 3, 6, dark, s)
+      // Shorter left side
+      rect(ctx, 14, 5, 3, 5, color, s)
+      rect(ctx, 14, 7, 20, 1, dark, s)
+      // Some hair falling over left eye
+      rect(ctx, 17, 6, 4, 3, color, s)
       break
     default: // short
       rect(ctx, 15, 2, 18, 6, color, s)
@@ -639,14 +894,97 @@ function drawHelmetEquip(ctx: Ctx, helmetId: string, s: number) {
       rect(ctx, 12, -1, 24, 3, "#E4D8B8", s)
       rect(ctx, 12, 9, 24, 2, "#B4A888", s)
       outline(ctx, 12, -1, 24, 12, "#8A7A5A", s)
-      // horns
       rect(ctx, 10, -4, 3, 6, "#C4B898", s)
       rect(ctx, 35, -4, 3, 6, "#C4B898", s)
       rect(ctx, 8, -6, 3, 4, "#D4C8A8", s)
       rect(ctx, 37, -6, 3, 4, "#D4C8A8", s)
-      // bone cracks
       px(ctx, 18, 3, "#A49878", s); px(ctx, 25, 5, "#A49878", s); px(ctx, 30, 3, "#A49878", s)
       shadow(ctx, 12, 11, 24, 1, s)
+      break
+    }
+    case "einherjar-crown": {
+      rect(ctx, 13, 0, 22, 10, "#C4A41A", s)
+      rect(ctx, 13, 0, 22, 3, "#E4C43A", s)
+      rect(ctx, 13, 8, 22, 2, "#A4841A", s)
+      outline(ctx, 13, 0, 22, 10, "#7A5A00", s)
+      // Radiant crown points
+      rect(ctx, 15, -3, 3, 4, "#E4C43A", s)
+      rect(ctx, 21, -4, 4, 5, "#FFE060", s)
+      rect(ctx, 28, -3, 3, 4, "#E4C43A", s)
+      // Divine glow halo
+      px(ctx, 22, -4, "#FFFFFF", s); px(ctx, 24, -4, "#FFFFFF", s)
+      // Valhalla gems
+      px(ctx, 22, 4, "#4AF0FF", s); px(ctx, 25, 4, "#4AF0FF", s)
+      px(ctx, 18, 5, "#FF6644", s); px(ctx, 30, 5, "#FF6644", s)
+      // Filigree
+      for (let x = 15; x < 33; x += 3) px(ctx, x, 7, "#FFE060", s)
+      shadow(ctx, 13, 10, 22, 1, s)
+      break
+    }
+    case "frost-giant-skull": {
+      rect(ctx, 11, -2, 26, 14, "#6A8A9A", s)
+      rect(ctx, 11, -2, 26, 4, "#8AAAB0", s)
+      rect(ctx, 11, 10, 26, 2, "#4A6A7A", s)
+      outline(ctx, 11, -2, 26, 14, "#2A4A5A", s)
+      // Giant eye sockets
+      rect(ctx, 17, 2, 5, 4, "#1A3A4A", s)
+      rect(ctx, 26, 2, 5, 4, "#1A3A4A", s)
+      // Ice forming in sockets
+      px(ctx, 19, 3, "#B0E0FF", s); px(ctx, 28, 3, "#B0E0FF", s)
+      // Jaw/teeth
+      rect(ctx, 16, 8, 3, 2, "#8AAAB0", s)
+      rect(ctx, 29, 8, 3, 2, "#8AAAB0", s)
+      // Ice crystals on skull
+      px(ctx, 14, 0, "#E0F4FF", s); px(ctx, 34, 0, "#E0F4FF", s)
+      px(ctx, 12, 4, "#B0E0FF", s); px(ctx, 36, 4, "#B0E0FF", s)
+      shadow(ctx, 11, 12, 26, 1, s)
+      break
+    }
+    case "serpent-coil": {
+      rect(ctx, 13, 0, 22, 10, "#2A5A2A", s)
+      rect(ctx, 13, 0, 22, 3, "#3A6A3A", s)
+      rect(ctx, 13, 8, 22, 2, "#1A3A1A", s)
+      outline(ctx, 13, 0, 22, 10, "#0A2A0A", s)
+      // Serpent coils wrapping
+      rect(ctx, 12, 2, 2, 6, "#3A7A3A", s)
+      rect(ctx, 34, 3, 2, 5, "#3A7A3A", s)
+      // Serpent head
+      rect(ctx, 20, -2, 4, 3, "#4A8A4A", s)
+      px(ctx, 21, -2, "#FFFF44", s) // eye
+      px(ctx, 23, -1, "#FF4444", s) // tongue
+      // Scale pattern
+      for (let x = 15; x < 33; x += 3) px(ctx, x, 5, "#4A8A4A", s)
+      shadow(ctx, 13, 10, 22, 1, s)
+      break
+    }
+    case "shadow-hood": {
+      rect(ctx, 13, -1, 22, 14, "#1A1A2A", s)
+      rect(ctx, 14, -1, 20, 3, "#2A2A3A", s)
+      rect(ctx, 13, 11, 22, 2, "#0A0A1A", s)
+      outline(ctx, 13, -1, 22, 14, "#000010", s)
+      // Hood drape sides
+      rect(ctx, 11, 4, 2, 10, "#1A1A2A", s)
+      rect(ctx, 35, 4, 2, 10, "#1A1A2A", s)
+      // Shadow within - only eyes visible
+      rect(ctx, 16, 4, 16, 8, "#0A0A14", s)
+      // Ghostly eye glow
+      px(ctx, 20, 8, "#4AF0FF60", s); px(ctx, 28, 8, "#4AF0FF60", s)
+      shadow(ctx, 13, 13, 22, 1, s)
+      break
+    }
+    case "thorn-crown": {
+      rect(ctx, 14, 0, 20, 8, "#2A1A2A", s)
+      rect(ctx, 14, 0, 20, 3, "#3A2A3A", s)
+      outline(ctx, 14, 0, 20, 8, "#0A000A", s)
+      // Thorns jutting out
+      px(ctx, 13, 1, "#3A2A3A", s); px(ctx, 12, 0, "#4A3A4A", s)
+      px(ctx, 35, 1, "#3A2A3A", s); px(ctx, 36, 0, "#4A3A4A", s)
+      px(ctx, 18, -2, "#3A2A3A", s); px(ctx, 24, -3, "#4A3A4A", s)
+      px(ctx, 30, -2, "#3A2A3A", s)
+      // Dark magic drip
+      px(ctx, 16, 8, "#AA44FF60", s); px(ctx, 32, 8, "#AA44FF60", s)
+      px(ctx, 20, 4, "#AA44FF", s); px(ctx, 28, 4, "#AA44FF", s)
+      shadow(ctx, 14, 8, 20, 1, s)
       break
     }
   }
@@ -803,13 +1141,95 @@ function drawChestEquip(ctx: Ctx, id: string, bodyType: string, chestStyle: stri
       rect(ctx, x, 21, w, 3, "#6A2A2A", s)
       rect(ctx, x, 30, w, 3, "#3A0A0A", s)
       outline(ctx, x, 21, w, 12, "#1A0000", s)
-      // chain pattern in blood red
       for (let iy = 24; iy < 33; iy += 2)
         for (let ix = x + 1; ix < x + w - 1; ix += 2)
           px(ctx, ix, iy, "#2A0A0A", s)
-      // glowing blood runes
       px(ctx, x + 4, 25, "#FF4444", s); px(ctx, x + w - 5, 25, "#FF4444", s)
       px(ctx, x + (w >> 1), 24, "#FF4444", s)
+      shadow(ctx, x, 33, w, 1, s)
+      break
+    }
+    case "fenrir-hide": {
+      rect(ctx, x, 21, w, 12, "#2A2A3A", s)
+      rect(ctx, x, 21, w, 3, "#3A3A4A", s)
+      rect(ctx, x, 30, w, 3, "#1A1A2A", s)
+      outline(ctx, x, 21, w, 12, "#0A0A1A", s)
+      // Dark fur texture
+      for (let ix = x + 1; ix < x + w - 1; ix += 3) {
+        px(ctx, ix, 24, "#3A3A5A", s)
+        px(ctx, ix + 1, 27, "#2A2A4A", s)
+      }
+      // Wolf claw marks
+      px(ctx, x + 3, 24, "#4AF0FF30", s); px(ctx, x + 4, 25, "#4AF0FF30", s)
+      // Shoulder fur
+      rect(ctx, x - 1, 19, 4, 4, "#3A3A4A", s)
+      rect(ctx, x + w - 3, 19, 4, 4, "#3A3A4A", s)
+      shadow(ctx, x, 33, w, 1, s)
+      break
+    }
+    case "valhalla-plate": {
+      rect(ctx, x, 21, w, 12, "#C4A41A", s)
+      rect(ctx, x, 21, w, 3, "#E4C43A", s)
+      rect(ctx, x, 30, w, 3, "#A4841A", s)
+      outline(ctx, x, 21, w, 12, "#7A5A00", s)
+      // Divine plate segments
+      rect(ctx, x + 3, 23, w - 6, 8, "#D4B42A", s)
+      outline(ctx, x + 3, 23, w - 6, 8, "#A4841A", s)
+      // Center divine symbol
+      px(ctx, x + (w >> 1), 25, "#FFFFFF", s)
+      px(ctx, x + (w >> 1) - 1, 26, "#FFFFFF", s)
+      px(ctx, x + (w >> 1) + 1, 26, "#FFFFFF", s)
+      // Shoulder plates
+      rect(ctx, x - 2, 19, 5, 4, "#E4C43A", s)
+      rect(ctx, x + w - 3, 19, 5, 4, "#E4C43A", s)
+      outline(ctx, x - 2, 19, 5, 4, "#A4841A", s)
+      outline(ctx, x + w - 3, 19, 5, 4, "#A4841A", s)
+      shadow(ctx, x, 33, w, 1, s)
+      break
+    }
+    case "frost-warden": {
+      rect(ctx, x, 21, w, 12, "#4A6A7A", s)
+      rect(ctx, x, 21, w, 3, "#5A7A8A", s)
+      rect(ctx, x, 30, w, 3, "#3A5A6A", s)
+      outline(ctx, x, 21, w, 12, "#1A3A4A", s)
+      // Ice crystals
+      px(ctx, x + 3, 24, "#B0E0FF", s); px(ctx, x + w - 4, 24, "#B0E0FF", s)
+      px(ctx, x + (w >> 1), 26, "#E0F4FF", s)
+      px(ctx, x + 5, 28, "#B0E0FF", s); px(ctx, x + w - 6, 28, "#B0E0FF", s)
+      // Frost trim
+      for (let ix = x; ix < x + w; ix += 2) px(ctx, ix, 21, "#B0E0FF", s)
+      shadow(ctx, x, 33, w, 1, s)
+      break
+    }
+    case "shadow-cloak": {
+      rect(ctx, x - 1, 20, w + 2, 14, "#0A0A1A", s)
+      rect(ctx, x - 1, 20, w + 2, 3, "#1A1A2A", s)
+      rect(ctx, x - 1, 31, w + 2, 3, "#050510", s)
+      outline(ctx, x - 1, 20, w + 2, 14, "#000008", s)
+      // Shadow wisps
+      px(ctx, x + 2, 24, "#1A1A3A", s); px(ctx, x + w - 3, 26, "#1A1A3A", s)
+      px(ctx, x + (w >> 1), 28, "#2A2A4A", s)
+      // Clasp
+      px(ctx, x + (w >> 1), 21, "#AA44FF", s)
+      shadow(ctx, x - 1, 34, w + 2, 1, s)
+      break
+    }
+    case "dragonscale-mail": {
+      rect(ctx, x, 21, w, 12, "#1A4A3A", s)
+      rect(ctx, x, 21, w, 3, "#2A5A4A", s)
+      rect(ctx, x, 30, w, 3, "#0A3A2A", s)
+      outline(ctx, x, 21, w, 12, "#002A1A", s)
+      // Iridescent scale pattern
+      for (let iy = 23; iy < 32; iy += 2)
+        for (let ix = x + 1; ix < x + w - 1; ix += 2) {
+          const c = (ix + iy) % 4 === 0 ? "#3A8A6A" : "#2A6A4A"
+          px(ctx, ix, iy, c, s)
+        }
+      // Shoulder spaulders
+      rect(ctx, x - 2, 19, 5, 4, "#2A5A4A", s)
+      rect(ctx, x + w - 3, 19, 5, 4, "#2A5A4A", s)
+      // Scale shimmer
+      px(ctx, x + 4, 24, "#4ABA8A", s); px(ctx, x + w - 5, 26, "#4ABA8A", s)
       shadow(ctx, x, 33, w, 1, s)
       break
     }
@@ -936,13 +1356,74 @@ function drawGlovesEquip(ctx: Ctx, glovesId: string, bodyType: string, s: number
       const startY = 21 + armLen - 7
       rect(ctx, lx, startY, w, 7, "#4A2A0A", s)
       rect(ctx, rx, startY, w, 7, "#4A2A0A", s)
-      // ember glow
       const eg = "#FF6600"
       px(ctx, lx + 1, startY + 2, eg, s); px(ctx, rx + 1, startY + 2, eg, s)
       px(ctx, lx + 2, startY + 4, eg, s); px(ctx, rx + 2, startY + 4, eg, s)
       px(ctx, lx + 1, startY + 6, "#FF4400", s); px(ctx, rx + 1, startY + 6, "#FF4400", s)
       rect(ctx, lx, 35, w, 3, "#3A1A00", s)
       rect(ctx, rx, 35, w, 3, "#3A1A00", s)
+      break
+    }
+    case "frost-claws": {
+      const startY = 21 + armLen - 8
+      rect(ctx, lx, startY, w, 8, "#4A6A7A", s)
+      rect(ctx, rx, startY, w, 8, "#4A6A7A", s)
+      rect(ctx, lx, startY, w, 2, "#5A7A8A", s)
+      rect(ctx, rx, startY, w, 2, "#5A7A8A", s)
+      outline(ctx, lx, startY, w, 8, "#2A4A5A", s)
+      outline(ctx, rx, startY, w, 8, "#2A4A5A", s)
+      rect(ctx, lx, 35, w, 3, "#3A5A6A", s)
+      rect(ctx, rx, 35, w, 3, "#3A5A6A", s)
+      // Ice claws
+      px(ctx, lx - 1, 36, "#B0E0FF", s); px(ctx, lx - 1, 37, "#E0F4FF", s)
+      px(ctx, rx + w, 36, "#B0E0FF", s); px(ctx, rx + w, 37, "#E0F4FF", s)
+      break
+    }
+    case "valhalla-grips": {
+      const startY = 21 + armLen - 8
+      rect(ctx, lx, startY, w, 8, "#C4A41A", s)
+      rect(ctx, rx, startY, w, 8, "#C4A41A", s)
+      rect(ctx, lx, startY, w, 2, "#E4C43A", s)
+      rect(ctx, rx, startY, w, 2, "#E4C43A", s)
+      outline(ctx, lx, startY, w, 8, "#7A5A00", s)
+      outline(ctx, rx, startY, w, 8, "#7A5A00", s)
+      rect(ctx, lx, 35, w, 3, "#A4841A", s)
+      rect(ctx, rx, 35, w, 3, "#A4841A", s)
+      px(ctx, lx + 1, startY + 4, "#FFFFFF", s); px(ctx, rx + 1, startY + 4, "#FFFFFF", s)
+      break
+    }
+    case "shadow-wraps": {
+      const startY = 21 + armLen - 6
+      rect(ctx, lx, startY, w, 6, "#1A1A2A", s)
+      rect(ctx, rx, startY, w, 6, "#1A1A2A", s)
+      rect(ctx, lx, 35, w, 3, "#0A0A1A", s)
+      rect(ctx, rx, 35, w, 3, "#0A0A1A", s)
+      px(ctx, lx + 1, startY + 3, "#3A3A5A", s); px(ctx, rx + 1, startY + 3, "#3A3A5A", s)
+      break
+    }
+    case "bone-knuckles": {
+      const startY = 21 + armLen - 4
+      rect(ctx, lx, startY, w, 4, "#8B6914", s)
+      rect(ctx, rx, startY, w, 4, "#8B6914", s)
+      rect(ctx, lx, 35, w, 3, "#C4B898", s)
+      rect(ctx, rx, 35, w, 3, "#C4B898", s)
+      outline(ctx, lx, 35, w, 3, "#8A7A5A", s)
+      outline(ctx, rx, 35, w, 3, "#8A7A5A", s)
+      break
+    }
+    case "thunder-fists": {
+      const startY = 21 + armLen - 8
+      rect(ctx, lx, startY, w, 8, "#3A3A5A", s)
+      rect(ctx, rx, startY, w, 8, "#3A3A5A", s)
+      rect(ctx, lx, startY, w, 2, "#4A4A6A", s)
+      rect(ctx, rx, startY, w, 2, "#4A4A6A", s)
+      outline(ctx, lx, startY, w, 8, "#1A1A3A", s)
+      outline(ctx, rx, startY, w, 8, "#1A1A3A", s)
+      rect(ctx, lx, 35, w, 3, "#2A2A4A", s)
+      rect(ctx, rx, 35, w, 3, "#2A2A4A", s)
+      // Lightning glow
+      px(ctx, lx + 1, startY + 3, "#FFFF44", s); px(ctx, rx + 1, startY + 3, "#FFFF44", s)
+      px(ctx, lx + 2, startY + 5, "#FFFF44", s); px(ctx, rx + 2, startY + 5, "#FFFF44", s)
       break
     }
   }
@@ -1043,10 +1524,58 @@ function drawPantsEquip(ctx: Ctx, pantsId: string, legStyle: string, s: number) 
       rect(ctx, rx, 33, rw, 10, "#3A1A0A", s)
       outline(ctx, lx, 33, lw, 10, "#1A0A00", s)
       outline(ctx, rx, 33, rw, 10, "#1A0A00", s)
-      // fire glow
       px(ctx, lx + 2, 37, "#FF6600", s); px(ctx, rx + 2, 37, "#FF6600", s)
       px(ctx, lx + 1, 39, "#FF4400", s); px(ctx, rx + 1, 39, "#FF4400", s)
       px(ctx, lx + 3, 41, "#FF8800", s); px(ctx, rx + 3, 41, "#FF8800", s)
+      break
+    case "bone-skirt": {
+      const sw = rx + rw - lx + 2
+      rect(ctx, lx - 1, 33, sw, 5, "#C4B898", s)
+      rect(ctx, lx - 1, 33, sw, 2, "#D4C8A8", s)
+      outline(ctx, lx - 1, 33, sw, 5, "#8A7A5A", s)
+      for (let i = 0; i < sw; i += 3) px(ctx, lx - 1 + i, 36, "#B4A888", s)
+      rect(ctx, lx, 38, lw, 5, "#A49878", s)
+      rect(ctx, rx, 38, rw, 5, "#A49878", s)
+      break
+    }
+    case "valhalla-guards":
+      rect(ctx, lx, 33, lw, 10, "#C4A41A", s)
+      rect(ctx, rx, 33, rw, 10, "#C4A41A", s)
+      rect(ctx, lx, 33, lw, 2, "#E4C43A", s)
+      rect(ctx, rx, 33, rw, 2, "#E4C43A", s)
+      outline(ctx, lx, 33, lw, 10, "#7A5A00", s)
+      outline(ctx, rx, 33, rw, 10, "#7A5A00", s)
+      px(ctx, lx + 2, 37, "#FFFFFF", s); px(ctx, rx + 2, 37, "#FFFFFF", s)
+      break
+    case "wolf-hide":
+      rect(ctx, lx, 33, lw, 10, "#2A2A3A", s)
+      rect(ctx, rx, 33, rw, 10, "#2A2A3A", s)
+      rect(ctx, lx, 33, lw, 3, "#3A3A4A", s)
+      rect(ctx, rx, 33, rw, 3, "#3A3A4A", s)
+      outline(ctx, lx, 33, lw, 10, "#0A0A1A", s)
+      outline(ctx, rx, 33, rw, 10, "#0A0A1A", s)
+      for (let i = 0; i < lw; i += 2) { px(ctx, lx + i, 34, "#4A4A5A", s); px(ctx, rx + i, 34, "#4A4A5A", s) }
+      break
+    case "thunder-greaves":
+      rect(ctx, lx, 33, lw, 10, "#3A3A5A", s)
+      rect(ctx, rx, 33, rw, 10, "#3A3A5A", s)
+      rect(ctx, lx, 33, lw, 2, "#4A4A6A", s)
+      rect(ctx, rx, 33, rw, 2, "#4A4A6A", s)
+      outline(ctx, lx, 33, lw, 10, "#1A1A3A", s)
+      outline(ctx, rx, 33, rw, 10, "#1A1A3A", s)
+      px(ctx, lx + 2, 37, "#FFFF44", s); px(ctx, rx + 2, 37, "#FFFF44", s)
+      px(ctx, lx + 1, 39, "#FFFF44", s); px(ctx, rx + 1, 39, "#FFFF44", s)
+      break
+    case "ice-bound":
+      rect(ctx, lx, 33, lw, 10, "#5A6A7A", s)
+      rect(ctx, rx, 33, rw, 10, "#5A6A7A", s)
+      outline(ctx, lx, 33, lw, 10, "#2A3A4A", s)
+      outline(ctx, rx, 33, rw, 10, "#2A3A4A", s)
+      rect(ctx, lx, 33, lw, 2, "#6A7A8A", s)
+      rect(ctx, rx, 33, rw, 2, "#6A7A8A", s)
+      // Ice crystal accents
+      px(ctx, lx + 1, 36, "#B0E0FF", s); px(ctx, rx + 1, 36, "#B0E0FF", s)
+      px(ctx, lx + 3, 39, "#E0F4FF", s); px(ctx, rx + 3, 39, "#E0F4FF", s)
       break
   }
 }
@@ -1134,8 +1663,62 @@ function drawBootsEquip(ctx: Ctx, bootsId: string, s: number) {
       rect(ctx, 27, 41, 7, 1, "#2A2A3A", s)
       outline(ctx, 14, 41, 7, 4, "#0A0A1A", s)
       outline(ctx, 27, 41, 7, 4, "#0A0A1A", s)
-      // shadow wisp
       px(ctx, 13, 44, "#2A2A4A", s); px(ctx, 35, 44, "#2A2A4A", s)
+      break
+    case "valhalla-treads":
+      rect(ctx, 14, 40, 7, 5, "#C4A41A", s)
+      rect(ctx, 27, 40, 7, 5, "#C4A41A", s)
+      rect(ctx, 14, 40, 7, 2, "#E4C43A", s)
+      rect(ctx, 27, 40, 7, 2, "#E4C43A", s)
+      rect(ctx, 13, 44, 8, 2, "#A4841A", s)
+      rect(ctx, 27, 44, 8, 2, "#A4841A", s)
+      outline(ctx, 14, 40, 7, 5, "#7A5A00", s)
+      outline(ctx, 27, 40, 7, 5, "#7A5A00", s)
+      break
+    case "ice-spiked":
+      rect(ctx, 14, 40, 7, 5, "#4A6A7A", s)
+      rect(ctx, 27, 40, 7, 5, "#4A6A7A", s)
+      rect(ctx, 14, 40, 7, 2, "#5A7A8A", s)
+      rect(ctx, 27, 40, 7, 2, "#5A7A8A", s)
+      outline(ctx, 14, 40, 7, 5, "#2A4A5A", s)
+      outline(ctx, 27, 40, 7, 5, "#2A4A5A", s)
+      // Ice spikes
+      px(ctx, 13, 42, "#B0E0FF", s); px(ctx, 21, 42, "#B0E0FF", s)
+      px(ctx, 26, 42, "#B0E0FF", s); px(ctx, 35, 42, "#B0E0FF", s)
+      break
+    case "wolf-paw":
+      rect(ctx, 14, 41, 7, 4, "#2A2A3A", s)
+      rect(ctx, 27, 41, 7, 4, "#2A2A3A", s)
+      rect(ctx, 14, 41, 7, 1, "#3A3A4A", s)
+      rect(ctx, 27, 41, 7, 1, "#3A3A4A", s)
+      rect(ctx, 13, 44, 8, 2, "#1A1A2A", s)
+      rect(ctx, 27, 44, 8, 2, "#1A1A2A", s)
+      // Claw tips
+      px(ctx, 13, 45, "#5A5A6A", s); px(ctx, 15, 45, "#5A5A6A", s); px(ctx, 17, 45, "#5A5A6A", s)
+      px(ctx, 27, 45, "#5A5A6A", s); px(ctx, 29, 45, "#5A5A6A", s); px(ctx, 31, 45, "#5A5A6A", s)
+      break
+    case "thunder-striders":
+      rect(ctx, 13, 39, 8, 7, "#3A3A5A", s)
+      rect(ctx, 27, 39, 8, 7, "#3A3A5A", s)
+      rect(ctx, 13, 39, 8, 2, "#4A4A6A", s)
+      rect(ctx, 27, 39, 8, 2, "#4A4A6A", s)
+      outline(ctx, 13, 39, 8, 7, "#1A1A3A", s)
+      outline(ctx, 27, 39, 8, 7, "#1A1A3A", s)
+      px(ctx, 16, 42, "#FFFF44", s); px(ctx, 30, 42, "#FFFF44", s)
+      px(ctx, 17, 44, "#FFFF44", s); px(ctx, 31, 44, "#FFFF44", s)
+      break
+    case "root-walkers":
+      rect(ctx, 14, 40, 7, 5, "#3A5A2A", s)
+      rect(ctx, 27, 40, 7, 5, "#3A5A2A", s)
+      rect(ctx, 14, 40, 7, 2, "#4A6A3A", s)
+      rect(ctx, 27, 40, 7, 2, "#4A6A3A", s)
+      rect(ctx, 13, 44, 8, 2, "#2A4A1A", s)
+      rect(ctx, 27, 44, 8, 2, "#2A4A1A", s)
+      outline(ctx, 14, 40, 7, 5, "#1A3A0A", s)
+      outline(ctx, 27, 40, 7, 5, "#1A3A0A", s)
+      // Living vine details
+      px(ctx, 15, 42, "#5A8A3A", s); px(ctx, 28, 42, "#5A8A3A", s)
+      px(ctx, 18, 43, "#4A7A2A", s); px(ctx, 32, 43, "#4A7A2A", s)
       break
   }
 }
@@ -1269,25 +1852,104 @@ function drawWeaponEquip(ctx: Ctx, weaponId: string, bodyType: string, s: number
       break
     }
     case "ragnarok-greatsword": {
-      // massive blade
       rect(ctx, handX, 0, 4, 30, "#8A8AAA", s)
-      rect(ctx, handX, 0, 1, 30, "#AAAACC", s) // highlight
-      rect(ctx, handX + 3, 0, 1, 30, "#6A6A8A", s) // shadow
-      rect(ctx, handX, 0, 4, 3, "#CCCCEE", s) // tip glow
-      // runes along blade
+      rect(ctx, handX, 0, 1, 30, "#AAAACC", s)
+      rect(ctx, handX + 3, 0, 1, 30, "#6A6A8A", s)
+      rect(ctx, handX, 0, 4, 3, "#CCCCEE", s)
       for (let y = 4; y < 28; y += 5) {
         px(ctx, handX + 1, y, "#D4A44A", s)
         px(ctx, handX + 2, y + 1, "#D4A44A", s)
       }
-      // massive guard
       rect(ctx, handX - 4, 30, 12, 3, "#C4A41A", s)
       rect(ctx, handX - 4, 30, 12, 1, "#E4C43A", s)
-      // handle
       rect(ctx, handX, 33, 4, 8, "#4A2A1A", s)
       rect(ctx, handX + 1, 33, 2, 8, "#5A3A2A", s)
-      // pommel
       rect(ctx, handX - 1, 41, 6, 3, "#C4A41A", s)
-      px(ctx, handX + 1, 42, "#FF3333", s) // gem
+      px(ctx, handX + 1, 42, "#FF3333", s)
+      break
+    }
+    case "gungnir-spear": {
+      // Odin's spear — long, elegant, with rune glow
+      rect(ctx, handX + 1, 2, 2, 38, "#7A7A8A", s)
+      rect(ctx, handX + 2, 2, 1, 38, "#8A8A9A", s)
+      // Spearhead — ornate
+      rect(ctx, handX, -4, 4, 8, "#CCCCDD", s)
+      rect(ctx, handX + 1, -6, 2, 4, "#DDDDEE", s)
+      rect(ctx, handX, -4, 1, 8, "#EEEEEE", s)
+      outline(ctx, handX, -4, 4, 8, "#6A6A8A", s)
+      // Rune glow along shaft
+      px(ctx, handX + 1, 8, "#D4A44A", s)
+      px(ctx, handX + 2, 14, "#D4A44A", s)
+      px(ctx, handX + 1, 20, "#D4A44A", s)
+      px(ctx, handX + 2, 26, "#D4A44A", s)
+      break
+    }
+    case "mjolnir": {
+      // Thor's hammer
+      rect(ctx, handX + 1, 14, 2, 24, "#6B4226", s)
+      rect(ctx, handX + 2, 14, 1, 24, "#7B5236", s)
+      // Hammer head — compact, massive
+      rect(ctx, handX - 4, 4, 12, 10, "#6A6A7A", s)
+      rect(ctx, handX - 4, 4, 12, 3, "#7A7A8A", s)
+      rect(ctx, handX - 4, 12, 12, 2, "#4A4A5A", s)
+      outline(ctx, handX - 4, 4, 12, 10, "#2A2A3A", s)
+      // Lightning runes
+      px(ctx, handX - 2, 7, "#FFFF44", s); px(ctx, handX + 1, 8, "#FFFF44", s)
+      px(ctx, handX + 4, 7, "#FFFF44", s); px(ctx, handX + 6, 9, "#FFFF44", s)
+      // Strap at handle
+      rect(ctx, handX, 36, 4, 1, "#8B7355", s)
+      break
+    }
+    case "ice-staff": {
+      // Frost staff
+      rect(ctx, handX + 1, 4, 2, 36, "#4A6A7A", s)
+      rect(ctx, handX + 2, 4, 1, 36, "#5A7A8A", s)
+      // Ice crystal on top
+      rect(ctx, handX - 1, -2, 6, 8, "#8AB4D0", s)
+      rect(ctx, handX, -3, 4, 4, "#B0E0FF", s)
+      rect(ctx, handX + 1, -4, 2, 3, "#E0F4FF", s)
+      px(ctx, handX + 1, -4, "#FFFFFF", s)
+      outline(ctx, handX - 1, -2, 6, 8, "#3A6A80", s)
+      // Ice glow
+      px(ctx, handX, 1, "#B0E0FF", s); px(ctx, handX + 4, 2, "#B0E0FF", s)
+      break
+    }
+    case "shadow-daggers": {
+      // Loki's twin shadow daggers
+      // Left dagger
+      rect(ctx, 3, 24, 2, 10, "#2A2A3A", s)
+      rect(ctx, 2, 18, 4, 6, "#4A4A5A", s)
+      rect(ctx, 2, 18, 1, 6, "#5A5A6A", s)
+      rect(ctx, 3, 16, 2, 3, "#6A6A7A", s)
+      // Shadow shimmer
+      px(ctx, 3, 20, "#AA44FF40", s); px(ctx, 4, 22, "#AA44FF40", s)
+      // Right dagger
+      rect(ctx, handX + 1, 24, 2, 10, "#2A2A3A", s)
+      rect(ctx, handX, 18, 4, 6, "#4A4A5A", s)
+      rect(ctx, handX, 18, 1, 6, "#5A5A6A", s)
+      rect(ctx, handX + 1, 16, 2, 3, "#6A6A7A", s)
+      px(ctx, handX + 1, 20, "#AA44FF40", s); px(ctx, handX + 2, 22, "#AA44FF40", s)
+      break
+    }
+    case "yggdrasil-staff": {
+      // Living wood staff
+      rect(ctx, handX + 1, 4, 2, 36, "#3A5A2A", s)
+      rect(ctx, handX, 4, 1, 36, "#4A6A3A", s)
+      rect(ctx, handX + 3, 4, 1, 36, "#2A4A1A", s)
+      // Living crown — branches and leaves
+      rect(ctx, handX - 2, -2, 8, 8, "#3A5A2A", s)
+      rect(ctx, handX - 3, 0, 2, 4, "#4A6A3A", s)
+      rect(ctx, handX + 5, 0, 2, 4, "#4A6A3A", s)
+      // Leaves
+      px(ctx, handX - 3, -1, "#5A8A3A", s); px(ctx, handX + 6, -1, "#5A8A3A", s)
+      px(ctx, handX, -2, "#6A9A4A", s); px(ctx, handX + 3, -3, "#6A9A4A", s)
+      // Life glow
+      px(ctx, handX + 1, 1, "#88FF44", s)
+      px(ctx, handX + 2, 3, "#66DD22", s)
+      // Vine wrapping
+      px(ctx, handX, 10, "#5A8A3A", s)
+      px(ctx, handX + 3, 16, "#5A8A3A", s)
+      px(ctx, handX, 22, "#5A8A3A", s)
       break
     }
   }
@@ -1383,6 +2045,42 @@ function drawHelmetItem(ctx: Ctx, id: string, s: number) {
       rect(ctx, 19, 0, 3, 5, "#C4B898", s)
       px(ctx, 8, 7, "#A49878", s); px(ctx, 15, 7, "#A49878", s)
       break
+    case "einherjar-crown":
+      rect(ctx, 4, 4, 16, 10, "#C4A41A", s)
+      rect(ctx, 4, 4, 16, 3, "#E4C43A", s)
+      outline(ctx, 4, 4, 16, 10, "#7A5A00", s)
+      rect(ctx, 6, 1, 3, 4, "#E4C43A", s); rect(ctx, 10, 0, 4, 4, "#FFE060", s); rect(ctx, 15, 1, 3, 4, "#E4C43A", s)
+      px(ctx, 11, 8, "#4AF0FF", s); px(ctx, 12, 8, "#4AF0FF", s)
+      break
+    case "frost-giant-skull":
+      rect(ctx, 3, 2, 18, 12, "#6A8A9A", s)
+      rect(ctx, 3, 2, 18, 3, "#8AAAB0", s)
+      outline(ctx, 3, 2, 18, 12, "#2A4A5A", s)
+      rect(ctx, 7, 5, 4, 3, "#1A3A4A", s); rect(ctx, 13, 5, 4, 3, "#1A3A4A", s)
+      px(ctx, 8, 6, "#B0E0FF", s); px(ctx, 14, 6, "#B0E0FF", s)
+      break
+    case "serpent-coil":
+      rect(ctx, 4, 3, 16, 11, "#2A5A2A", s)
+      rect(ctx, 4, 3, 16, 3, "#3A6A3A", s)
+      outline(ctx, 4, 3, 16, 11, "#0A2A0A", s)
+      rect(ctx, 9, 0, 6, 3, "#4A8A4A", s)
+      px(ctx, 10, 1, "#FFFF44", s)
+      break
+    case "shadow-hood":
+      rect(ctx, 4, 2, 16, 14, "#1A1A2A", s)
+      rect(ctx, 4, 2, 16, 3, "#2A2A3A", s)
+      outline(ctx, 4, 2, 16, 14, "#000010", s)
+      rect(ctx, 7, 7, 10, 6, "#0A0A14", s)
+      px(ctx, 9, 10, "#4AF0FF60", s); px(ctx, 14, 10, "#4AF0FF60", s)
+      break
+    case "thorn-crown":
+      rect(ctx, 4, 4, 16, 8, "#2A1A2A", s)
+      rect(ctx, 4, 4, 16, 3, "#3A2A3A", s)
+      outline(ctx, 4, 4, 16, 8, "#0A000A", s)
+      px(ctx, 3, 5, "#4A3A4A", s); px(ctx, 20, 5, "#4A3A4A", s)
+      px(ctx, 7, 2, "#3A2A3A", s); px(ctx, 12, 1, "#4A3A4A", s); px(ctx, 16, 2, "#3A2A3A", s)
+      px(ctx, 10, 8, "#AA44FF", s); px(ctx, 14, 8, "#AA44FF", s)
+      break
   }
 }
 
@@ -1447,6 +2145,37 @@ function drawChestItem(ctx: Ctx, id: string, s: number) {
         for (let ix = 3; ix < 21; ix += 2) px(ctx, ix, iy, "#2A0A0A", s)
       px(ctx, 12, 8, "#FF4444", s)
       break
+    case "fenrir-hide":
+      rect(ctx, 3, 3, 18, 14, "#2A2A3A", s)
+      rect(ctx, 3, 3, 18, 3, "#3A3A4A", s)
+      outline(ctx, 3, 3, 18, 14, "#0A0A1A", s)
+      px(ctx, 8, 8, "#4AF0FF30", s); px(ctx, 15, 10, "#4AF0FF30", s)
+      break
+    case "valhalla-plate":
+      rect(ctx, 3, 3, 18, 14, "#C4A41A", s)
+      rect(ctx, 3, 3, 18, 3, "#E4C43A", s)
+      outline(ctx, 3, 3, 18, 14, "#7A5A00", s)
+      px(ctx, 12, 9, "#FFFFFF", s)
+      break
+    case "frost-warden":
+      rect(ctx, 3, 3, 18, 14, "#4A6A7A", s)
+      rect(ctx, 3, 3, 18, 3, "#5A7A8A", s)
+      outline(ctx, 3, 3, 18, 14, "#1A3A4A", s)
+      px(ctx, 8, 9, "#B0E0FF", s); px(ctx, 15, 9, "#B0E0FF", s)
+      break
+    case "shadow-cloak":
+      rect(ctx, 3, 3, 18, 14, "#0A0A1A", s)
+      rect(ctx, 3, 3, 18, 3, "#1A1A2A", s)
+      outline(ctx, 3, 3, 18, 14, "#000008", s)
+      px(ctx, 12, 5, "#AA44FF", s)
+      break
+    case "dragonscale-mail":
+      rect(ctx, 3, 3, 18, 14, "#1A4A3A", s)
+      rect(ctx, 3, 3, 18, 3, "#2A5A4A", s)
+      outline(ctx, 3, 3, 18, 14, "#002A1A", s)
+      for (let iy = 7; iy < 17; iy += 2)
+        for (let ix = 3; ix < 21; ix += 2) px(ctx, ix, iy, "#3A8A6A", s)
+      break
   }
 }
 
@@ -1460,6 +2189,11 @@ function drawGlovesItem(ctx: Ctx, id: string, s: number) {
     "spiked-fists": ["#5A5A5A", "#7A7A7A", "#3A3A3A"],
     "dragonscale-grips": ["#2A5A3A", "#3A6A4A", "#1A4A2A"],
     "ember-wraps": ["#4A2A0A", "#5A3A1A", "#3A1A00"],
+    "frost-claws": ["#4A6A7A", "#5A7A8A", "#2A4A5A"],
+    "valhalla-grips": ["#C4A41A", "#E4C43A", "#7A5A00"],
+    "shadow-wraps": ["#1A1A2A", "#2A2A3A", "#0A0A1A"],
+    "bone-knuckles": ["#C4B898", "#D4C8A8", "#8A7A5A"],
+    "thunder-fists": ["#3A3A5A", "#4A4A6A", "#1A1A3A"],
   }
   const [base, hi, dk] = pairs[id] || ["#8B6914", "#9B7924", "#7B5904"]
   rect(ctx, 3, 5, 8, 12, base, s)
@@ -1474,6 +2208,9 @@ function drawGlovesItem(ctx: Ctx, id: string, s: number) {
   if (id === "spiked-fists") { px(ctx, 2, 8, "#AAAAAA", s); px(ctx, 21, 8, "#AAAAAA", s) }
   if (id === "ember-wraps") { px(ctx, 6, 10, "#FF6600", s); px(ctx, 16, 10, "#FF6600", s) }
   if (id === "dragonscale-grips") { px(ctx, 6, 10, "#4A8A5A", s); px(ctx, 16, 10, "#4A8A5A", s) }
+  if (id === "frost-claws") { px(ctx, 2, 12, "#B0E0FF", s); px(ctx, 21, 12, "#B0E0FF", s) }
+  if (id === "valhalla-grips") { px(ctx, 6, 10, "#FFFFFF", s); px(ctx, 16, 10, "#FFFFFF", s) }
+  if (id === "thunder-fists") { px(ctx, 6, 10, "#FFFF44", s); px(ctx, 16, 10, "#FFFF44", s) }
 }
 
 function drawPantsItem(ctx: Ctx, id: string, s: number) {
@@ -1486,6 +2223,11 @@ function drawPantsItem(ctx: Ctx, id: string, s: number) {
     "iron-chain-skirt": ["#7A7A7A", "#9A9A9A", "#3A3A3A"],
     "shadow-leggings": ["#1A1A2A", "#2A2A3A", "#0A0A1A"],
     "flame-guards": ["#3A1A0A", "#5A2A1A", "#1A0A00"],
+    "bone-skirt": ["#C4B898", "#D4C8A8", "#8A7A5A"],
+    "valhalla-guards": ["#C4A41A", "#E4C43A", "#7A5A00"],
+    "wolf-hide": ["#2A2A3A", "#3A3A4A", "#0A0A1A"],
+    "thunder-greaves": ["#3A3A5A", "#4A4A6A", "#1A1A3A"],
+    "ice-bound": ["#5A6A7A", "#6A7A8A", "#2A3A4A"],
   }
   const [base, hi, dk] = colors[id] || ["#6A5A3A", "#7A6A4A", "#3A2A1A"]
   // waist
@@ -1500,6 +2242,10 @@ function drawPantsItem(ctx: Ctx, id: string, s: number) {
   if (id === "runic-legguards") { px(ctx, 6, 12, "#4AF0FF", s); px(ctx, 16, 12, "#4AF0FF", s) }
   if (id === "flame-guards") { px(ctx, 6, 14, "#FF6600", s); px(ctx, 16, 14, "#FF6600", s) }
   if (id === "shadow-leggings") { px(ctx, 6, 13, "#3A3A5A", s); px(ctx, 16, 13, "#3A3A5A", s) }
+  if (id === "valhalla-guards") { px(ctx, 6, 12, "#FFFFFF", s); px(ctx, 16, 12, "#FFFFFF", s) }
+  if (id === "thunder-greaves") { px(ctx, 6, 12, "#FFFF44", s); px(ctx, 16, 12, "#FFFF44", s) }
+  if (id === "ice-bound") { px(ctx, 6, 12, "#B0E0FF", s); px(ctx, 16, 12, "#B0E0FF", s) }
+  if (id === "wolf-hide") { px(ctx, 6, 12, "#4A4A5A", s); px(ctx, 16, 12, "#4A4A5A", s) }
 }
 
 function drawBootsItem(ctx: Ctx, id: string, s: number) {
@@ -1512,6 +2258,11 @@ function drawBootsItem(ctx: Ctx, id: string, s: number) {
     "bone-treads": ["#C4B898", "#D4C8A8", "#8A7A5A"],
     "flamestep": ["#3A1A0A", "#5A2A1A", "#1A0A00"],
     "shadow-step": ["#1A1A2A", "#2A2A3A", "#0A0A1A"],
+    "valhalla-treads": ["#C4A41A", "#E4C43A", "#7A5A00"],
+    "ice-spiked": ["#4A6A7A", "#5A7A8A", "#2A4A5A"],
+    "wolf-paw": ["#2A2A3A", "#3A3A4A", "#0A0A1A"],
+    "thunder-striders": ["#3A3A5A", "#4A4A6A", "#1A1A3A"],
+    "root-walkers": ["#3A5A2A", "#4A6A3A", "#1A3A0A"],
   }
   const [base, hi, dk] = colors[id] || ["#6B4226", "#7B5236", "#3B1206"]
   rect(ctx, 3, 6, 8, 8, base, s)
@@ -1527,6 +2278,11 @@ function drawBootsItem(ctx: Ctx, id: string, s: number) {
   if (id === "flamestep") { px(ctx, 5, 13, "#FF6600", s); px(ctx, 7, 13, "#FF8800", s); px(ctx, 15, 13, "#FF6600", s); px(ctx, 17, 13, "#FF8800", s) }
   if (id === "bone-treads") { px(ctx, 2, 10, "#B4A888", s); px(ctx, 21, 10, "#B4A888", s) }
   if (id === "shadow-step") { px(ctx, 2, 13, "#2A2A4A", s); px(ctx, 21, 13, "#2A2A4A", s) }
+  if (id === "valhalla-treads") { px(ctx, 6, 10, "#FFFFFF", s); px(ctx, 16, 10, "#FFFFFF", s) }
+  if (id === "ice-spiked") { px(ctx, 2, 10, "#B0E0FF", s); px(ctx, 21, 10, "#B0E0FF", s) }
+  if (id === "wolf-paw") { px(ctx, 4, 13, "#5A5A6A", s); px(ctx, 6, 13, "#5A5A6A", s); px(ctx, 14, 13, "#5A5A6A", s); px(ctx, 16, 13, "#5A5A6A", s) }
+  if (id === "thunder-striders") { px(ctx, 6, 10, "#FFFF44", s); px(ctx, 16, 10, "#FFFF44", s) }
+  if (id === "root-walkers") { px(ctx, 5, 10, "#5A8A3A", s); px(ctx, 15, 10, "#5A8A3A", s) }
 }
 
 function drawWeaponItem(ctx: Ctx, id: string, s: number) {
@@ -1609,6 +2365,44 @@ function drawWeaponItem(ctx: Ctx, id: string, s: number) {
       for (let y = 3; y < 16; y += 4) px(ctx, 12, y, "#D4A44A", s)
       rect(ctx, 8, 18, 8, 2, "#C4A41A", s)
       rect(ctx, 11, 20, 3, 4, "#4A2A1A", s)
+      break
+    case "gungnir-spear":
+      rect(ctx, 11, 4, 2, 18, "#7A7A8A", s)
+      rect(ctx, 10, 0, 4, 6, "#CCCCDD", s)
+      rect(ctx, 11, -1, 2, 3, "#EEEEEE", s)
+      outline(ctx, 10, 0, 4, 6, "#6A6A8A", s)
+      px(ctx, 12, 10, "#D4A44A", s); px(ctx, 11, 16, "#D4A44A", s)
+      break
+    case "mjolnir":
+      rect(ctx, 11, 10, 2, 12, "#6B4226", s)
+      rect(ctx, 6, 2, 12, 8, "#6A6A7A", s)
+      rect(ctx, 6, 2, 12, 3, "#7A7A8A", s)
+      outline(ctx, 6, 2, 12, 8, "#2A2A3A", s)
+      px(ctx, 8, 5, "#FFFF44", s); px(ctx, 11, 6, "#FFFF44", s); px(ctx, 14, 5, "#FFFF44", s)
+      break
+    case "ice-staff":
+      rect(ctx, 11, 6, 2, 16, "#4A6A7A", s)
+      rect(ctx, 9, 0, 6, 6, "#8AB4D0", s)
+      rect(ctx, 10, -1, 4, 3, "#B0E0FF", s)
+      px(ctx, 11, -1, "#FFFFFF", s)
+      outline(ctx, 9, 0, 6, 6, "#3A6A80", s)
+      break
+    case "shadow-daggers":
+      rect(ctx, 6, 4, 1, 10, "#2A2A3A", s)
+      rect(ctx, 5, 1, 3, 5, "#4A4A5A", s)
+      rect(ctx, 6, 0, 1, 2, "#6A6A7A", s)
+      rect(ctx, 17, 4, 1, 10, "#2A2A3A", s)
+      rect(ctx, 16, 1, 3, 5, "#4A4A5A", s)
+      rect(ctx, 17, 0, 1, 2, "#6A6A7A", s)
+      px(ctx, 6, 5, "#AA44FF40", s); px(ctx, 17, 5, "#AA44FF40", s)
+      break
+    case "yggdrasil-staff":
+      rect(ctx, 11, 6, 2, 16, "#3A5A2A", s)
+      rect(ctx, 9, 0, 6, 7, "#3A5A2A", s)
+      rect(ctx, 8, 2, 2, 3, "#4A6A3A", s)
+      rect(ctx, 14, 2, 2, 3, "#4A6A3A", s)
+      px(ctx, 9, 0, "#6A9A4A", s); px(ctx, 13, -1, "#6A9A4A", s)
+      px(ctx, 11, 3, "#88FF44", s)
       break
   }
 }
