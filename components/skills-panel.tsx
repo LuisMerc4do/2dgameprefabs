@@ -1007,148 +1007,410 @@ const drawRagnarokDrop: SkillDrawFn = (ctx, t, config, equipped, s) => {
 // ---- BEAM ----
 
 const drawNiflheimBeam: SkillDrawFn = (ctx, t, config, equipped, s) => {
-  drawSkillCharacter(ctx, config, s, equipped)
+  // Character in channeling pose with arms forward
+  const recoil = Math.sin(t * Math.PI * 4) * 0.5
+  drawSkillCharacter(ctx, config, s, equipped, -recoil, 0)
   const pulse = 0.7 + 0.3 * Math.sin(t * Math.PI * 8)
-  const beamW = 3 * pulse
-  // Icy beam shooting right
-  const grad = ctx.createLinearGradient(20 * s, 0, 48 * s, 0)
-  grad.addColorStop(0, `rgba(180,240,255,0.9)`)
-  grad.addColorStop(0.4, `rgba(220,255,255,1)`)
-  grad.addColorStop(1, `rgba(180,240,255,0.1)`)
+  const cx = 24, cy = 26
+  // Charging orb at hands — pulsing with frost energy
   ctx.save()
-  ctx.fillStyle = grad
+  const orbR = 3 + pulse * 1.5
+  const orbGrad = ctx.createRadialGradient(20 * s, cy * s, 0, 20 * s, cy * s, orbR * s)
+  orbGrad.addColorStop(0, "rgba(255,255,255,1)")
+  orbGrad.addColorStop(0.3, "rgba(200,240,255,0.95)")
+  orbGrad.addColorStop(0.7, "rgba(140,210,255,0.7)")
+  orbGrad.addColorStop(1, "rgba(100,180,240,0)")
+  ctx.fillStyle = orbGrad
+  ctx.shadowColor = "#88DCFF"
+  ctx.shadowBlur = 24 * pulse
+  ctx.beginPath()
+  ctx.arc(20 * s, cy * s, orbR * s, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+  // Main beam — triple layered with outer frost, mid beam, inner white core
+  const beamStartX = 22
+  const beamLen = 26
+  // Outer frost haze
+  ctx.save()
+  const outerGrad = ctx.createLinearGradient(beamStartX * s, 0, 48 * s, 0)
+  outerGrad.addColorStop(0, "rgba(100,180,240,0.6)")
+  outerGrad.addColorStop(0.5, "rgba(140,210,255,0.4)")
+  outerGrad.addColorStop(1, "rgba(100,180,240,0)")
+  ctx.fillStyle = outerGrad
+  ctx.shadowColor = "#60B0F0"
+  ctx.shadowBlur = 20 * pulse
+  ctx.fillRect(beamStartX * s, (cy - 4) * s, beamLen * s, 8 * s)
+  ctx.restore()
+  // Mid beam
+  ctx.save()
+  const midGrad = ctx.createLinearGradient(beamStartX * s, 0, 48 * s, 0)
+  midGrad.addColorStop(0, "rgba(180,240,255,0.95)")
+  midGrad.addColorStop(0.6, "rgba(220,255,255,0.8)")
+  midGrad.addColorStop(1, "rgba(180,240,255,0.1)")
+  ctx.fillStyle = midGrad
   ctx.shadowColor = "#88DCFF"
   ctx.shadowBlur = 14 * pulse
-  ctx.fillRect(20 * s, (26 - beamW / 2) * s, 28 * s, beamW * s)
+  ctx.fillRect(beamStartX * s, (cy - 2) * s, beamLen * s, 4 * s)
   ctx.restore()
-  // Frost particles along beam
-  for (let i = 0; i < 6; i++) {
-    const bx = 22 + prng(i, t * 5) * 24
-    const by = 26 + (prng(i + 5, t * 4) - 0.5) * 5
-    const ba = prng(i + 8, t * 3) * 0.7 + 0.3
+  // Inner white core
+  ctx.save()
+  const coreGrad = ctx.createLinearGradient(beamStartX * s, 0, 44 * s, 0)
+  coreGrad.addColorStop(0, "rgba(255,255,255,1)")
+  coreGrad.addColorStop(0.4, "rgba(240,255,255,0.9)")
+  coreGrad.addColorStop(1, "rgba(255,255,255,0)")
+  ctx.fillStyle = coreGrad
+  ctx.shadowColor = "#FFFFFF"
+  ctx.shadowBlur = 10
+  ctx.fillRect(beamStartX * s, (cy - 0.5) * s, (beamLen - 4) * s, 1 * s)
+  ctx.restore()
+  // Frost crystallization particles along beam path
+  for (let i = 0; i < 12; i++) {
+    const bx = beamStartX + prng(i, t * 5) * beamLen
+    const by = cy + (prng(i + 5, t * 4) - 0.5) * 7
+    const ba = prng(i + 8, t * 3) * 0.8 + 0.2
+    const sz = prng(i + 15, 0) > 0.5 ? 2 : 1
     ctx.save()
     ctx.fillStyle = `rgba(200,240,255,${ba})`
     ctx.shadowColor = "#AAEEFF"
-    ctx.shadowBlur = 4
-    r(ctx, bx, by, 1, 1, `rgba(200,240,255,${ba})`, s)
+    ctx.shadowBlur = 6
+    r(ctx, bx, by, sz, sz, `rgba(200,240,255,${ba})`, s)
     ctx.restore()
   }
-  // Origin orb
+  // Ice crystal shards forming at beam edges
+  for (let i = 0; i < 5; i++) {
+    const phase = (t * 3 + i * 0.2) % 1
+    const shardX = beamStartX + 4 + phase * (beamLen - 6)
+    const shardDir = i % 2 === 0 ? -1 : 1
+    const shardY = cy + shardDir * (2 + phase * 3)
+    const alpha = Math.sin(phase * Math.PI) * 0.7
+    ctx.save()
+    ctx.fillStyle = `rgba(180,230,255,${alpha})`
+    ctx.shadowColor = "#88CCFF"
+    ctx.shadowBlur = 4
+    r(ctx, shardX, shardY, 1, 2, `rgba(180,230,255,${alpha})`, s)
+    ctx.restore()
+  }
+  // Ground frost accumulation beneath beam
   ctx.save()
-  ctx.fillStyle = `rgba(220,255,255,${pulse})`
-  ctx.shadowColor = "#88DCFF"
-  ctx.shadowBlur = 16
-  ctx.beginPath()
-  ctx.arc(22 * s, 26 * s, 3 * pulse * s, 0, Math.PI * 2)
-  ctx.fill()
+  ctx.globalAlpha = 0.3 * pulse
+  for (let i = 0; i < 8; i++) {
+    const gx = beamStartX + 2 + i * 3
+    const gy = 44 + prng(i + 20, 0) * 2
+    r(ctx, gx, gy, 2, 1, "#B0E0FF", s)
+  }
   ctx.restore()
 }
 
 const drawLightningArc: SkillDrawFn = (ctx, t, config, equipped, s) => {
-  drawSkillCharacter(ctx, config, s, equipped)
+  // Character with electric aura — channeling lightning overhead
+  const shake = Math.sin(t * Math.PI * 12) * 0.4
+  drawSkillCharacter(ctx, config, s, equipped, shake, 0)
   const cx = 24, cy = 26
-  // Draw jagged lightning to multiple targets
-  for (let target = 0; target < 2; target++) {
-    const tx = target === 0 ? 46 : 40
-    const ty = target === 0 ? 20 : 36
-    const segments = 6
+  // Electric aura around character
+  ctx.save()
+  const auraPulse = 0.4 + 0.3 * Math.sin(t * Math.PI * 6)
+  ctx.globalAlpha = auraPulse
+  ctx.strokeStyle = "#FFFF44"
+  ctx.lineWidth = s
+  ctx.shadowColor = "#FFFF00"
+  ctx.shadowBlur = 18
+  ctx.beginPath()
+  ctx.ellipse(cx * s, cy * s, 12 * s, 16 * s, 0, 0, Math.PI * 2)
+  ctx.stroke()
+  ctx.restore()
+  // Main lightning bolt — thick, branching, to primary target
+  const targets = [
+    { x: 46, y: 16, color: "#FFFF80", width: 2.5, segments: 8 },
+    { x: 44, y: 38, color: "#CCDDFF", width: 1.8, segments: 7 },
+    { x: 40, y: 8, color: "#AAFFEE", width: 1.2, segments: 5 },
+  ]
+  targets.forEach((tgt, ti) => {
     const points: [number, number][] = [[cx + 4, cy]]
-    for (let i = 1; i < segments; i++) {
-      const fx = cx + 4 + (tx - cx - 4) * (i / segments)
-      const fy = cy + (ty - cy) * (i / segments)
-      const jitter = (prng(i + target * 10, t * 5) - 0.5) * 6
-      points.push([fx + jitter, fy + jitter * 0.5])
+    for (let i = 1; i < tgt.segments; i++) {
+      const fx = cx + 4 + (tgt.x - cx - 4) * (i / tgt.segments)
+      const fy = cy + (tgt.y - cy) * (i / tgt.segments)
+      const jitter = (prng(i + ti * 17, t * 8) - 0.5) * 8
+      points.push([fx + jitter, fy + jitter * 0.4])
     }
-    points.push([tx, ty])
+    points.push([tgt.x, tgt.y])
+    // Outer glow stroke
     ctx.save()
-    ctx.strokeStyle = target === 0 ? "#FFFF80" : "#AAFFAA"
-    ctx.lineWidth = (2 - target * 0.5) * s
-    ctx.shadowColor = "#FFFF44"
-    ctx.shadowBlur = 12
+    ctx.strokeStyle = `rgba(255,255,100,0.3)`
+    ctx.lineWidth = (tgt.width + 2) * s
+    ctx.shadowColor = tgt.color
+    ctx.shadowBlur = 20
     ctx.beginPath()
     ctx.moveTo(points[0][0] * s, points[0][1] * s)
-    for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i][0] * s, points[i][1] * s)
-    }
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0] * s, points[i][1] * s)
     ctx.stroke()
-    // Target impact
-    ctx.fillStyle = `rgba(255,255,100,${0.6 + 0.4 * Math.sin(t * Math.PI * 8 + target)})`
-    ctx.shadowColor = "#FFFF44"
+    ctx.restore()
+    // Inner bright bolt
+    ctx.save()
+    ctx.strokeStyle = tgt.color
+    ctx.lineWidth = tgt.width * s
+    ctx.shadowColor = "#FFFFFF"
     ctx.shadowBlur = 8
     ctx.beginPath()
-    ctx.arc(tx * s, ty * s, 3 * s, 0, Math.PI * 2)
+    ctx.moveTo(points[0][0] * s, points[0][1] * s)
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0] * s, points[i][1] * s)
+    ctx.stroke()
+    ctx.restore()
+    // White core line
+    ctx.save()
+    ctx.strokeStyle = "#FFFFFF"
+    ctx.lineWidth = 0.5 * s
+    ctx.beginPath()
+    ctx.moveTo(points[0][0] * s, points[0][1] * s)
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0] * s, points[i][1] * s)
+    ctx.stroke()
+    ctx.restore()
+    // Branch from midpoint
+    if (ti === 0) {
+      const midIdx = Math.floor(points.length / 2)
+      const mp = points[midIdx]
+      const bx = mp[0] + (prng(50, t * 6) - 0.5) * 10
+      const by = mp[1] + (prng(51, t * 6) - 0.5) * 10
+      ctx.save()
+      ctx.strokeStyle = "#FFFF80"
+      ctx.lineWidth = s
+      ctx.shadowColor = "#FFFF44"
+      ctx.shadowBlur = 8
+      ctx.beginPath()
+      ctx.moveTo(mp[0] * s, mp[1] * s)
+      ctx.lineTo(bx * s, by * s)
+      ctx.stroke()
+      ctx.restore()
+    }
+    // Impact explosion at target
+    const impactPulse = 0.6 + 0.4 * Math.sin(t * Math.PI * 10 + ti * 2)
+    ctx.save()
+    ctx.fillStyle = `rgba(255,255,150,${impactPulse})`
+    ctx.shadowColor = tgt.color
+    ctx.shadowBlur = 16 * impactPulse
+    ctx.beginPath()
+    ctx.arc(tgt.x * s, tgt.y * s, (3 + impactPulse) * s, 0, Math.PI * 2)
     ctx.fill()
     ctx.restore()
+    // Impact sparks
+    for (let sp = 0; sp < 4; sp++) {
+      const angle = (sp / 4) * Math.PI * 2 + t * 6
+      const dist = 2 + prng(sp + ti * 10, t * 3) * 4
+      const spx = tgt.x + Math.cos(angle) * dist
+      const spy = tgt.y + Math.sin(angle) * dist
+      p(ctx, spx, spy, `rgba(255,255,200,${0.8 - sp * 0.15})`, s)
+    }
+  })
+  // Small ambient sparks near character
+  for (let i = 0; i < 6; i++) {
+    const phase = (t * 4 + i / 6) % 1
+    const sx = cx + (prng(i + 30, t * 2) - 0.5) * 16
+    const sy = cy - 10 + prng(i + 35, t * 2) * 20
+    const alpha = (1 - phase) * 0.8
+    p(ctx, sx, sy, `rgba(255,255,100,${alpha})`, s)
   }
 }
 
 const drawSoulDrain: SkillDrawFn = (ctx, t, config, equipped, s) => {
-  drawSkillCharacter(ctx, config, s, equipped)
   const cx = 24, cy = 26
-  // Dark energy beam + life steal
   const pulse = 0.6 + 0.4 * Math.sin(t * Math.PI * 6)
-  // Purple/dark beam
+  // Dark channeling aura around character
   ctx.save()
-  ctx.fillStyle = `rgba(100,20,140,${pulse * 0.9})`
-  ctx.shadowColor = "#6614AA"
-  ctx.shadowBlur = 12 * pulse
-  ctx.fillRect((cx + 4) * s, (cy - 2) * s, 20 * s, 4 * s)
-  ctx.restore()
-  // Soul particles flowing back to player
-  for (let i = 0; i < 5; i++) {
-    const phase = (t * 1.5 + i / 5) % 1
-    const px2 = lerp(44, cx + 4, easeOut(phase))
-    const py = cy + (prng(i, 0) - 0.5) * 8
-    const alpha = Math.sin(phase * Math.PI)
-    ctx.save()
-    ctx.fillStyle = `rgba(180,100,255,${alpha})`
-    ctx.shadowColor = "#AA66FF"
-    ctx.shadowBlur = 8
-    r(ctx, px2 - 1, py - 1, 2, 2, `rgba(180,100,255,${alpha})`, s)
-    ctx.restore()
-  }
-  // Target (being drained)
-  ctx.save()
-  ctx.globalAlpha = 0.5
-  ctx.fillStyle = "#662222"
-  r(ctx, 38, 16, 8, 18, "#662222", s)
-  ctx.restore()
-  // Heal glow on player
-  ctx.save()
-  ctx.globalAlpha = 0.3 * pulse
-  ctx.fillStyle = "#44FF88"
-  ctx.shadowColor = "#44FF88"
-  ctx.shadowBlur = 16
+  ctx.globalAlpha = 0.35 * pulse
+  const darkAura = ctx.createRadialGradient(cx * s, cy * s, 2 * s, cx * s, cy * s, 16 * s)
+  darkAura.addColorStop(0, "rgba(80,0,120,0.8)")
+  darkAura.addColorStop(0.5, "rgba(60,0,100,0.4)")
+  darkAura.addColorStop(1, "rgba(40,0,80,0)")
+  ctx.fillStyle = darkAura
   ctx.beginPath()
-  ctx.ellipse(cx * s, cy * s, 10 * s, 14 * s, 0, 0, Math.PI * 2)
+  ctx.ellipse(cx * s, cy * s, 16 * s, 18 * s, 0, 0, Math.PI * 2)
   ctx.fill()
   ctx.restore()
+  // Character with arm extended
+  drawSkillCharacter(ctx, config, s, equipped)
+  // Target victim — dark silhouette writhing
+  const victimShake = Math.sin(t * Math.PI * 10) * 0.5
+  ctx.save()
+  ctx.globalAlpha = 0.7
+  // Victim body
+  r(ctx, 40 + victimShake, 20, 5, 12, "#442233", s)
+  r(ctx, 41 + victimShake, 16, 3, 5, "#553344", s) // head
+  r(ctx, 38 + victimShake, 22, 2, 8, "#332233", s) // left arm
+  r(ctx, 45 + victimShake, 22, 2, 8, "#332233", s) // right arm
+  r(ctx, 40 + victimShake, 32, 2, 8, "#332233", s) // legs
+  r(ctx, 43 + victimShake, 32, 2, 8, "#332233", s)
+  ctx.restore()
+  // Victim's pain aura (red)
+  ctx.save()
+  ctx.globalAlpha = 0.3 * pulse
+  ctx.fillStyle = "#FF2244"
+  ctx.shadowColor = "#FF0033"
+  ctx.shadowBlur = 12
+  ctx.beginPath()
+  ctx.ellipse(42 * s, 26 * s, 5 * s, 8 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+  // Dark energy tether — sinuous dark beam connecting player to target
+  ctx.save()
+  const tethGrad = ctx.createLinearGradient((cx + 4) * s, 0, 40 * s, 0)
+  tethGrad.addColorStop(0, "rgba(120,30,180,0.9)")
+  tethGrad.addColorStop(0.5, "rgba(80,10,140,0.7)")
+  tethGrad.addColorStop(1, "rgba(100,20,160,0.9)")
+  ctx.strokeStyle = tethGrad
+  ctx.lineWidth = 3 * s * pulse
+  ctx.shadowColor = "#8822CC"
+  ctx.shadowBlur = 16
+  ctx.beginPath()
+  ctx.moveTo((cx + 4) * s, cy * s)
+  const wave1 = Math.sin(t * Math.PI * 4) * 3
+  const wave2 = Math.sin(t * Math.PI * 4 + 1) * 3
+  ctx.bezierCurveTo(
+    32 * s, (cy + wave1) * s,
+    36 * s, (cy + wave2) * s,
+    40 * s, 26 * s
+  )
+  ctx.stroke()
+  ctx.restore()
+  // Inner tether core
+  ctx.save()
+  ctx.strokeStyle = "rgba(200,100,255,0.8)"
+  ctx.lineWidth = s
+  ctx.shadowColor = "#CC88FF"
+  ctx.shadowBlur = 8
+  ctx.beginPath()
+  ctx.moveTo((cx + 4) * s, cy * s)
+  ctx.bezierCurveTo(32 * s, (cy + wave1) * s, 36 * s, (cy + wave2) * s, 40 * s, 26 * s)
+  ctx.stroke()
+  ctx.restore()
+  // Soul wisps flowing from victim back to player — green/purple
+  for (let i = 0; i < 8; i++) {
+    const phase = (t * 1.8 + i / 8) % 1
+    const wpx = lerp(42, cx, easeOut(phase))
+    const wpy = cy + (prng(i, 0) - 0.5) * 10 + Math.sin(phase * Math.PI * 3 + i) * 3
+    const alpha = Math.sin(phase * Math.PI)
+    const sz = 1 + prng(i + 20, 0)
+    // Soul color transitions from red (victim pain) to green (heal)
+    const rr = Math.floor(lerp(255, 60, phase))
+    const gg = Math.floor(lerp(60, 255, phase))
+    const bb = Math.floor(lerp(100, 120, phase))
+    ctx.save()
+    ctx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`
+    ctx.shadowColor = `rgba(${rr},${gg},${bb},0.8)`
+    ctx.shadowBlur = 8
+    r(ctx, wpx - sz / 2, wpy - sz / 2, sz, sz, `rgba(${rr},${gg},${bb},${alpha})`, s)
+    ctx.restore()
+  }
+  // Heal glow on player — green energy absorbing
+  ctx.save()
+  ctx.globalAlpha = 0.25 * pulse
+  const healGrad = ctx.createRadialGradient(cx * s, cy * s, 0, cx * s, cy * s, 12 * s)
+  healGrad.addColorStop(0, "rgba(68,255,136,0.6)")
+  healGrad.addColorStop(0.5, "rgba(68,255,136,0.3)")
+  healGrad.addColorStop(1, "rgba(68,255,136,0)")
+  ctx.fillStyle = healGrad
+  ctx.shadowColor = "#44FF88"
+  ctx.shadowBlur = 20
+  ctx.beginPath()
+  ctx.ellipse(cx * s, cy * s, 12 * s, 14 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+  // Rising + signs near player (health regeneration)
+  for (let i = 0; i < 3; i++) {
+    const phase = (t * 2 + i * 0.33) % 1
+    const hx = cx - 4 + i * 4
+    const hy = cy - 4 - phase * 10
+    const alpha = (1 - phase) * 0.7
+    ctx.save()
+    ctx.fillStyle = `rgba(68,255,136,${alpha})`
+    ctx.shadowColor = "#44FF88"
+    ctx.shadowBlur = 4
+    r(ctx, hx, hy, 3, 1, `rgba(68,255,136,${alpha})`, s)
+    r(ctx, hx + 1, hy - 1, 1, 3, `rgba(68,255,136,${alpha})`, s)
+    ctx.restore()
+  }
 }
 
 const drawRunicRay: SkillDrawFn = (ctx, t, config, equipped, s) => {
-  drawSkillCharacter(ctx, config, s, equipped)
-  const cy = 26
-  // Runic ray — concentrated beam with rune symbols floating along it
+  const cx = 24, cy = 26
   const pulse = 0.8 + 0.2 * Math.sin(t * Math.PI * 10)
+  // Character channeling with rune circles
+  drawSkillCharacter(ctx, config, s, equipped)
+  // Orbiting rune circle around character's hands
   ctx.save()
-  ctx.fillStyle = `rgba(74,240,255,${pulse * 0.9})`
+  ctx.strokeStyle = `rgba(74,240,255,${0.5 * pulse})`
+  ctx.lineWidth = s
   ctx.shadowColor = "#4AF0FF"
-  ctx.shadowBlur = 18 * pulse
-  ctx.fillRect(26 * s, (cy - 2) * s, 22 * s, 4 * s)
+  ctx.shadowBlur = 10
+  ctx.beginPath()
+  ctx.arc(22 * s, cy * s, 5 * s, t * Math.PI * 4, t * Math.PI * 4 + Math.PI * 1.5)
+  ctx.stroke()
   ctx.restore()
-  // Floating runes along beam
-  for (let i = 0; i < 4; i++) {
-    const phase = (t * 2 + i * 0.25) % 1
-    const rx = 28 + phase * 18
-    const ry = cy - 3 + (prng(i, 0) - 0.5) * 4
-    const alpha = Math.sin(phase * Math.PI)
+  // Concentrated runic beam — multi-layered
+  // Outer glow
+  ctx.save()
+  const outerGrad = ctx.createLinearGradient(24 * s, 0, 48 * s, 0)
+  outerGrad.addColorStop(0, "rgba(74,240,255,0.5)")
+  outerGrad.addColorStop(0.5, "rgba(74,240,255,0.3)")
+  outerGrad.addColorStop(1, "rgba(74,240,255,0)")
+  ctx.fillStyle = outerGrad
+  ctx.shadowColor = "#4AF0FF"
+  ctx.shadowBlur = 24 * pulse
+  ctx.fillRect(24 * s, (cy - 3) * s, 24 * s, 6 * s)
+  ctx.restore()
+  // Mid beam
+  ctx.save()
+  const midGrad = ctx.createLinearGradient(24 * s, 0, 48 * s, 0)
+  midGrad.addColorStop(0, "rgba(100,255,255,0.95)")
+  midGrad.addColorStop(0.6, "rgba(74,240,255,0.8)")
+  midGrad.addColorStop(1, "rgba(74,240,255,0.2)")
+  ctx.fillStyle = midGrad
+  ctx.shadowColor = "#4AF0FF"
+  ctx.shadowBlur = 16 * pulse
+  ctx.fillRect(24 * s, (cy - 1.5) * s, 24 * s, 3 * s)
+  ctx.restore()
+  // Core
+  ctx.save()
+  ctx.fillStyle = `rgba(220,255,255,${pulse})`
+  ctx.shadowColor = "#FFFFFF"
+  ctx.shadowBlur = 8
+  ctx.fillRect(24 * s, (cy - 0.3) * s, 20 * s, 0.6 * s)
+  ctx.restore()
+  // Floating Norse runes traveling along beam — multiple rune types
+  const runeChars = ["\u16B1", "\u16A0", "\u16A6", "\u16B7", "\u16C1", "\u16C7"]
+  for (let i = 0; i < 7; i++) {
+    const phase = (t * 2.5 + i * 0.14) % 1
+    const rx = 26 + phase * 20
+    const ry = cy + (prng(i, 0) - 0.5) * 6
+    const alpha = Math.sin(phase * Math.PI) * 0.9
+    const rotation = t * 2 + i
+    const runeChar = runeChars[i % runeChars.length]
     ctx.save()
-    ctx.font = `${Math.floor(3 * s)}px monospace`
+    ctx.translate(rx * s, ry * s)
+    ctx.rotate(rotation)
+    ctx.font = `${Math.floor(3.5 * s)}px monospace`
     ctx.fillStyle = `rgba(220,255,255,${alpha})`
     ctx.shadowColor = "#4AF0FF"
-    ctx.shadowBlur = 6
-    ctx.fillText("ᚱ", rx * s, ry * s)
+    ctx.shadowBlur = 8
+    ctx.textAlign = "center"
+    ctx.fillText(runeChar, 0, 0)
     ctx.restore()
+  }
+  // Impact zone — runic explosion at beam end
+  const impactPulse = 0.5 + 0.5 * Math.sin(t * Math.PI * 6)
+  ctx.save()
+  ctx.fillStyle = `rgba(74,240,255,${impactPulse * 0.6})`
+  ctx.shadowColor = "#4AF0FF"
+  ctx.shadowBlur = 16
+  ctx.beginPath()
+  ctx.arc(47 * s, cy * s, (3 + impactPulse * 2) * s, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+  // Small rune particles scattering at impact
+  for (let i = 0; i < 5; i++) {
+    const angle = (i / 5) * Math.PI * 2 + t * 3
+    const dist = 2 + impactPulse * 3
+    const px2 = 47 + Math.cos(angle) * dist
+    const py = cy + Math.sin(angle) * dist
+    p(ctx, px2, py, `rgba(200,255,255,${0.7 - i * 0.1})`, s)
   }
 }
 
