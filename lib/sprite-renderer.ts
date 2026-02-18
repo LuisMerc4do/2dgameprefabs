@@ -2425,6 +2425,15 @@ export function drawMonster(ctx: Ctx, monsterId: string, scale: number = 4) {
     case "valkyrie-shade": drawValkyrieShade(ctx, scale); break
     case "nidhoggr-spawn": drawNidhoggrSpawn(ctx, scale); break
     case "cultist-loki": drawCultistLoki(ctx, scale); break
+    case "hel-revenant": drawHelRevenant(ctx, scale); break
+    case "fire-jotunn": drawFireJotunn(ctx, scale); break
+    case "troll-berserker": drawTrollBerserker(ctx, scale); break
+    case "rune-golem": drawRuneGolem(ctx, scale); break
+    case "dark-elf": drawDarkElf(ctx, scale); break
+    case "kraken-spawn": drawKrakenSpawn(ctx, scale); break
+    case "yggdrasil-ent": drawYggdrasilEnt(ctx, scale); break
+    case "fenrir-alpha": drawFenrirAlpha(ctx, scale); break
+    case "surtr-the-destroyer": drawSurtr(ctx, scale); break
   }
 }
 
@@ -2961,6 +2970,552 @@ function drawCultistLoki(ctx: Ctx, s: number) {
   px(ctx, 4, 10, ts, s); px(ctx, 42, 8, ts, s)
   px(ctx, 3, 28, ts, s); px(ctx, 43, 26, ts, s)
   px(ctx, 6, 16, ts + "60", s); px(ctx, 40, 14, ts + "60", s)
+}
+
+function drawHelRevenant(ctx: Ctx, s: number) {
+  const bone = "#AAA888", boneD = "#7A7A5A", boneH = "#CCCCAA"
+  // Death-flame aura (green)
+  ctx.fillStyle = "rgba(68,255,68,0.1)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 28 * s, 16 * s, 18 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 10, 2, s)
+  // Skeletal head
+  rect(ctx, 16, 4, 16, 14, bone, s)
+  rect(ctx, 16, 4, 16, 3, boneH, s)
+  rect(ctx, 16, 15, 16, 3, boneD, s)
+  outline(ctx, 16, 4, 16, 14, "#4A4A2A", s)
+  // Empty eye sockets with green fire
+  rect(ctx, 19, 8, 4, 4, "#1A1A0A", s)
+  rect(ctx, 26, 8, 4, 4, "#1A1A0A", s)
+  rect(ctx, 20, 9, 2, 2, "#44FF44", s)
+  rect(ctx, 27, 9, 2, 2, "#44FF44", s)
+  // Green flame above eyes
+  px(ctx, 20, 7, "#44FF4480", s); px(ctx, 27, 7, "#44FF4480", s)
+  px(ctx, 21, 6, "#44FF4440", s); px(ctx, 28, 6, "#44FF4440", s)
+  // Jaw - loose teeth
+  rect(ctx, 20, 14, 8, 3, boneD, s)
+  px(ctx, 21, 14, boneH, s); px(ctx, 23, 14, boneH, s); px(ctx, 25, 14, boneH, s)
+  // Tattered robe
+  rect(ctx, 14, 18, 20, 24, "#1A3A1A", s)
+  rect(ctx, 14, 18, 20, 4, "#2A4A2A", s)
+  rect(ctx, 14, 38, 20, 4, "#0A2A0A", s)
+  outline(ctx, 14, 18, 20, 24, "#001A00", s)
+  // Tattered edges
+  px(ctx, 14, 42, "#0A2A0A", s); px(ctx, 18, 43, "#0A2A0A", s)
+  px(ctx, 26, 43, "#0A2A0A", s); px(ctx, 33, 42, "#0A2A0A", s)
+  // Green rune glow on robe
+  px(ctx, 20, 24, "#44FF44", s); px(ctx, 28, 26, "#44FF44", s)
+  px(ctx, 24, 30, "#44FF44", s); px(ctx, 18, 34, "#44FF44", s)
+  // Skeletal arms out of sleeves
+  rect(ctx, 9, 22, 5, 10, bone, s)
+  rect(ctx, 34, 22, 5, 10, bone, s)
+  outline(ctx, 9, 22, 5, 10, "#4A4A2A", s)
+  outline(ctx, 34, 22, 5, 10, "#4A4A2A", s)
+  // Hands — bony fingers
+  px(ctx, 9, 32, boneD, s); px(ctx, 11, 32, boneD, s)
+  px(ctx, 34, 32, boneD, s); px(ctx, 36, 32, boneD, s)
+  // Necrotic orb in hand
+  rect(ctx, 35, 28, 4, 4, "#44FF44", s)
+  rect(ctx, 36, 29, 2, 2, "#88FF88", s)
+  // Orb glow
+  ctx.fillStyle = "rgba(68,255,68,0.2)"
+  ctx.beginPath()
+  ctx.ellipse(37 * s, 30 * s, 4 * s, 4 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // Floating spirits
+  px(ctx, 6, 8, "#44FF4480", s); px(ctx, 42, 10, "#44FF4480", s)
+  px(ctx, 4, 20, "#44FF4460", s); px(ctx, 44, 18, "#44FF4460", s)
+}
+
+function drawFireJotunn(ctx: Ctx, s: number) {
+  const skin = "#8A3A1A", skinH = "#AA4A2A", skinD = "#5A1A0A"
+  // Massive fire aura
+  ctx.fillStyle = "rgba(255,100,0,0.12)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 22 * s, 24 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 18, 3, s)
+  // Massive head
+  rect(ctx, 11, -2, 26, 18, skin, s)
+  rect(ctx, 11, -2, 26, 5, skinH, s)
+  rect(ctx, 11, 12, 26, 4, skinD, s)
+  outline(ctx, 11, -2, 26, 18, "#3A0A00", s)
+  // Burning eyes
+  rect(ctx, 15, 4, 5, 4, "#FF6600", s)
+  rect(ctx, 28, 4, 5, 4, "#FF6600", s)
+  px(ctx, 16, 5, "#FFCC00", s); px(ctx, 29, 5, "#FFCC00", s)
+  rect(ctx, 14, 3, 7, 6, "#FF660020", s)
+  rect(ctx, 27, 3, 7, 6, "#FF660020", s)
+  // Fire coming from eyes
+  px(ctx, 16, 3, "#FF880060", s); px(ctx, 29, 3, "#FF880060", s)
+  // Mouth with flame
+  rect(ctx, 18, 10, 12, 4, skinD, s)
+  px(ctx, 19, 10, "#FFFFFF", s); px(ctx, 22, 10, "#FFFFFF", s)
+  px(ctx, 26, 10, "#FFFFFF", s); px(ctx, 28, 10, "#FFFFFF", s)
+  px(ctx, 21, 13, "#FF6600", s); px(ctx, 24, 14, "#FF880060", s)
+  // Fire crown
+  rect(ctx, 14, -5, 4, 5, "#FF6600", s)
+  rect(ctx, 20, -7, 4, 6, "#FFAA00", s)
+  rect(ctx, 26, -5, 4, 5, "#FF6600", s)
+  rect(ctx, 30, -4, 4, 4, "#FF880080", s)
+  rect(ctx, 8, -3, 4, 3, "#FF880080", s)
+  px(ctx, 22, -7, "#FFCC00", s); px(ctx, 16, -5, "#FFCC00", s)
+  // Massive body
+  rect(ctx, 4, 16, 40, 16, skin, s)
+  rect(ctx, 4, 16, 40, 5, skinH, s)
+  rect(ctx, 4, 28, 40, 4, skinD, s)
+  outline(ctx, 4, 16, 40, 16, "#3A0A00", s)
+  // Molten cracks on body
+  px(ctx, 10, 20, "#FF6600", s); px(ctx, 18, 22, "#FF6600", s)
+  px(ctx, 28, 19, "#FF6600", s); px(ctx, 36, 24, "#FF6600", s)
+  px(ctx, 14, 26, "#FFAA00", s); px(ctx, 32, 22, "#FFAA00", s)
+  // Arms (huge)
+  rect(ctx, -2, 18, 6, 18, skin, s)
+  rect(ctx, 44, 18, 6, 18, skin, s)
+  rect(ctx, -2, 18, 6, 4, skinH, s); rect(ctx, 44, 18, 6, 4, skinH, s)
+  rect(ctx, -2, 32, 6, 4, skinD, s); rect(ctx, 44, 32, 6, 4, skinD, s)
+  outline(ctx, -2, 18, 6, 18, "#3A0A00", s)
+  outline(ctx, 44, 18, 6, 18, "#3A0A00", s)
+  // Flaming sword
+  rect(ctx, 44, 4, 3, 30, "#6A6A7A", s)
+  rect(ctx, 44, 4, 1, 30, "#8A8A9A", s)
+  rect(ctx, 43, -2, 5, 8, "#FF6600", s)
+  rect(ctx, 44, -4, 3, 5, "#FFAA00", s)
+  px(ctx, 45, -4, "#FFCC00", s)
+  // Legs
+  rect(ctx, 8, 32, 12, 12, skinD, s)
+  rect(ctx, 28, 32, 12, 12, skinD, s)
+  outline(ctx, 8, 32, 12, 12, "#3A0A00", s)
+  outline(ctx, 28, 32, 12, 12, "#3A0A00", s)
+  // Flame particles around body
+  px(ctx, 2, 10, "#FF880060", s); px(ctx, 46, 12, "#FF880060", s)
+  px(ctx, 8, 6, "#FF660040", s); px(ctx, 40, 8, "#FF660040", s)
+}
+
+function drawTrollBerserker(ctx: Ctx, s: number) {
+  const skin = "#3A6A3A", skinH = "#4A8A4A", skinD = "#1A4A1A"
+  groundShadow(ctx, 24, 47, 14, 3, s)
+  // Huge hunched body
+  rect(ctx, 8, 14, 32, 18, skin, s)
+  rect(ctx, 8, 14, 32, 5, skinH, s)
+  rect(ctx, 8, 28, 32, 4, skinD, s)
+  outline(ctx, 8, 14, 32, 18, "#0A2A0A", s)
+  // Belly
+  rect(ctx, 14, 22, 20, 8, skinH, s)
+  // Head (small for body, sits forward)
+  rect(ctx, 18, 4, 14, 12, skin, s)
+  rect(ctx, 18, 4, 14, 3, skinH, s)
+  rect(ctx, 18, 13, 14, 3, skinD, s)
+  outline(ctx, 18, 4, 14, 12, "#0A2A0A", s)
+  // Angry eyes
+  rect(ctx, 20, 8, 3, 3, "#FF4400", s)
+  rect(ctx, 27, 8, 3, 3, "#FF4400", s)
+  px(ctx, 21, 9, "#FFCC00", s); px(ctx, 28, 9, "#FFCC00", s)
+  // Brow ridge
+  rect(ctx, 19, 7, 5, 1, skinD, s); rect(ctx, 26, 7, 5, 1, skinD, s)
+  // Lower jaw with underbite
+  rect(ctx, 20, 13, 10, 3, skinD, s)
+  px(ctx, 21, 13, "#DDDDAA", s); px(ctx, 24, 13, "#DDDDAA", s)
+  px(ctx, 28, 13, "#DDDDAA", s)
+  // Nose
+  rect(ctx, 24, 10, 3, 3, skinD, s)
+  // Big arms
+  rect(ctx, 2, 16, 6, 20, skin, s)
+  rect(ctx, 40, 16, 6, 20, skin, s)
+  rect(ctx, 2, 16, 6, 4, skinH, s); rect(ctx, 40, 16, 6, 4, skinH, s)
+  outline(ctx, 2, 16, 6, 20, "#0A2A0A", s)
+  outline(ctx, 40, 16, 6, 20, "#0A2A0A", s)
+  // Fists
+  rect(ctx, 1, 36, 8, 5, skinD, s); rect(ctx, 39, 36, 8, 5, skinD, s)
+  // Stone club in right hand
+  rect(ctx, 42, 8, 4, 28, "#5A4A3A", s)
+  rect(ctx, 40, 2, 8, 8, "#7A7A7A", s)
+  rect(ctx, 40, 2, 8, 3, "#8A8A8A", s)
+  outline(ctx, 40, 2, 8, 8, "#3A3A3A", s)
+  // Stone texture
+  px(ctx, 42, 4, "#9A9A9A", s); px(ctx, 45, 6, "#6A6A6A", s)
+  // Short legs
+  rect(ctx, 12, 32, 10, 10, skinD, s)
+  rect(ctx, 26, 32, 10, 10, skinD, s)
+  outline(ctx, 12, 32, 10, 10, "#0A2A0A", s)
+  outline(ctx, 26, 32, 10, 10, "#0A2A0A", s)
+  // Warts/bumps
+  px(ctx, 14, 18, "#5A9A5A", s); px(ctx, 34, 20, "#5A9A5A", s)
+  px(ctx, 22, 16, "#5A9A5A", s)
+}
+
+function drawRuneGolem(ctx: Ctx, s: number) {
+  const stone = "#5A5A6A", stoneH = "#7A7A8A", stoneD = "#3A3A4A"
+  // Rune glow aura
+  ctx.fillStyle = "rgba(74,240,255,0.08)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 18 * s, 20 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 16, 3, s)
+  // Head (rectangular, monolithic)
+  rect(ctx, 15, 2, 18, 12, stone, s)
+  rect(ctx, 15, 2, 18, 3, stoneH, s)
+  rect(ctx, 15, 11, 18, 3, stoneD, s)
+  outline(ctx, 15, 2, 18, 12, "#1A1A2A", s)
+  // Rune eyes
+  rect(ctx, 18, 6, 4, 3, "#4AF0FF", s)
+  rect(ctx, 26, 6, 4, 3, "#4AF0FF", s)
+  px(ctx, 19, 7, "#FFFFFF", s); px(ctx, 27, 7, "#FFFFFF", s)
+  // Rune on forehead
+  px(ctx, 23, 3, "#4AF0FF", s); px(ctx, 24, 4, "#4AF0FF", s)
+  px(ctx, 22, 4, "#4AF0FF", s); px(ctx, 25, 4, "#4AF0FF", s)
+  // Massive body
+  rect(ctx, 6, 14, 36, 18, stone, s)
+  rect(ctx, 6, 14, 36, 5, stoneH, s)
+  rect(ctx, 6, 27, 36, 5, stoneD, s)
+  outline(ctx, 6, 14, 36, 18, "#1A1A2A", s)
+  // Rune patterns on body (glowing)
+  px(ctx, 12, 18, "#4AF0FF", s); px(ctx, 14, 20, "#4AF0FF", s)
+  px(ctx, 13, 22, "#4AF0FF", s); px(ctx, 11, 24, "#4AF0FF", s)
+  px(ctx, 34, 18, "#4AF0FF", s); px(ctx, 36, 20, "#4AF0FF", s)
+  px(ctx, 35, 22, "#4AF0FF", s); px(ctx, 33, 24, "#4AF0FF", s)
+  // Center rune sigil
+  px(ctx, 23, 20, "#4AF0FF", s); px(ctx, 24, 19, "#4AF0FF", s)
+  px(ctx, 25, 20, "#4AF0FF", s); px(ctx, 24, 21, "#4AF0FF", s)
+  px(ctx, 24, 20, "#FFFFFF", s)
+  // Stone cracks
+  px(ctx, 16, 19, stoneD, s); px(ctx, 28, 22, stoneH, s)
+  px(ctx, 20, 26, stoneD, s); px(ctx, 32, 17, stoneH, s)
+  // Arms (massive stone pillars)
+  rect(ctx, 0, 16, 6, 18, stone, s)
+  rect(ctx, 42, 16, 6, 18, stone, s)
+  rect(ctx, 0, 16, 6, 4, stoneH, s); rect(ctx, 42, 16, 6, 4, stoneH, s)
+  outline(ctx, 0, 16, 6, 18, "#1A1A2A", s)
+  outline(ctx, 42, 16, 6, 18, "#1A1A2A", s)
+  // Rune on arms
+  px(ctx, 2, 24, "#4AF0FF", s); px(ctx, 44, 24, "#4AF0FF", s)
+  // Fists
+  rect(ctx, -1, 34, 8, 6, stoneD, s); rect(ctx, 41, 34, 8, 6, stoneD, s)
+  // Legs
+  rect(ctx, 10, 32, 10, 12, stoneD, s)
+  rect(ctx, 28, 32, 10, 12, stoneD, s)
+  outline(ctx, 10, 32, 10, 12, "#1A1A2A", s)
+  outline(ctx, 28, 32, 10, 12, "#1A1A2A", s)
+}
+
+function drawDarkElf(ctx: Ctx, s: number) {
+  const skin = "#4A3A5A", skinH = "#6A5A7A", skinD = "#2A1A3A"
+  groundShadow(ctx, 24, 47, 8, 2, s)
+  // Shadow aura
+  ctx.fillStyle = "rgba(40,20,60,0.15)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 30 * s, 14 * s, 16 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // Head
+  rect(ctx, 17, 6, 14, 12, skin, s)
+  rect(ctx, 17, 6, 14, 3, skinH, s)
+  rect(ctx, 17, 15, 14, 3, skinD, s)
+  outline(ctx, 17, 6, 14, 12, "#0A0020", s)
+  // Pointed ears
+  rect(ctx, 14, 8, 3, 4, skin, s); rect(ctx, 31, 8, 3, 4, skin, s)
+  px(ctx, 14, 7, skinH, s); px(ctx, 33, 7, skinH, s)
+  // Eyes — glowing purple
+  rect(ctx, 20, 10, 3, 2, "#AA44FF", s)
+  rect(ctx, 26, 10, 3, 2, "#AA44FF", s)
+  px(ctx, 21, 10, "#DD88FF", s); px(ctx, 27, 10, "#DD88FF", s)
+  // Slender body — dark leather armor
+  rect(ctx, 15, 18, 18, 12, "#1A1A2A", s)
+  rect(ctx, 15, 18, 18, 3, "#2A2A3A", s)
+  rect(ctx, 15, 27, 18, 3, "#0A0A1A", s)
+  outline(ctx, 15, 18, 18, 12, "#000010", s)
+  // Cross-body belt
+  for (let i = 0; i < 10; i++) {
+    px(ctx, 17 + i * 1.5, 20 + i, "#3A3A5A", s)
+  }
+  // Dark hood
+  rect(ctx, 16, 4, 16, 8, "#1A1A2A", s)
+  rect(ctx, 17, 4, 14, 2, "#2A2A3A", s)
+  outline(ctx, 16, 4, 16, 8, "#000010", s)
+  // Face opening
+  rect(ctx, 19, 8, 10, 7, skin, s)
+  // Re-draw eyes on top
+  rect(ctx, 20, 10, 3, 2, "#AA44FF", s)
+  rect(ctx, 26, 10, 3, 2, "#AA44FF", s)
+  px(ctx, 21, 10, "#DD88FF", s); px(ctx, 27, 10, "#DD88FF", s)
+  // Arms
+  rect(ctx, 10, 20, 5, 12, "#1A1A2A", s)
+  rect(ctx, 33, 20, 5, 12, "#1A1A2A", s)
+  outline(ctx, 10, 20, 5, 12, "#000010", s)
+  outline(ctx, 33, 20, 5, 12, "#000010", s)
+  // Legs
+  rect(ctx, 17, 30, 5, 12, "#0A0A1A", s)
+  rect(ctx, 26, 30, 5, 12, "#0A0A1A", s)
+  outline(ctx, 17, 30, 5, 12, "#000010", s)
+  outline(ctx, 26, 30, 5, 12, "#000010", s)
+  // Twin daggers
+  rect(ctx, 7, 22, 2, 10, "#4A4A5A", s)
+  rect(ctx, 7, 18, 2, 5, "#8A8AAA", s)
+  px(ctx, 7, 17, "#AAAACC", s)
+  rect(ctx, 39, 22, 2, 10, "#4A4A5A", s)
+  rect(ctx, 39, 18, 2, 5, "#8A8AAA", s)
+  px(ctx, 39, 17, "#AAAACC", s)
+  // Shadow particles
+  px(ctx, 4, 14, "#AA44FF40", s); px(ctx, 42, 12, "#AA44FF40", s)
+  px(ctx, 6, 28, "#AA44FF30", s); px(ctx, 40, 26, "#AA44FF30", s)
+}
+
+function drawKrakenSpawn(ctx: Ctx, s: number) {
+  const tent = "#3A2A5A", tentH = "#5A4A7A", tentD = "#1A0A3A"
+  // Water splash base
+  ctx.fillStyle = "rgba(74,140,255,0.12)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 42 * s, 18 * s, 5 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // Main body — bulbous
+  rect(ctx, 14, 8, 20, 16, tent, s)
+  rect(ctx, 14, 8, 20, 5, tentH, s)
+  rect(ctx, 14, 20, 20, 4, tentD, s)
+  outline(ctx, 14, 8, 20, 16, "#0A0020", s)
+  // Domed top
+  rect(ctx, 16, 4, 16, 5, tent, s)
+  rect(ctx, 18, 2, 12, 3, tentH, s)
+  rect(ctx, 20, 1, 8, 2, tent, s)
+  // Giant eye
+  rect(ctx, 20, 10, 8, 6, "#DDDDEE", s)
+  outline(ctx, 20, 10, 8, 6, tentD, s)
+  rect(ctx, 22, 11, 4, 4, "#FF4400", s)
+  rect(ctx, 23, 12, 2, 2, "#1A0A00", s)
+  px(ctx, 23, 11, "#FFAA00", s)
+  // Suckers/spots
+  px(ctx, 17, 14, tentH, s); px(ctx, 31, 14, tentH, s)
+  px(ctx, 16, 18, tentH, s); px(ctx, 32, 18, tentH, s)
+  // Tentacles (8 of them spreading out)
+  // Left tentacles
+  rect(ctx, 4, 22, 12, 4, tent, s)
+  rect(ctx, 2, 26, 10, 3, tentD, s)
+  rect(ctx, 0, 29, 8, 3, tent, s)
+  px(ctx, 0, 31, tentH, s); px(ctx, 3, 31, tentH, s)
+  rect(ctx, 8, 24, 8, 4, tent, s)
+  rect(ctx, 6, 28, 6, 3, tentD, s)
+  // Right tentacles
+  rect(ctx, 32, 22, 12, 4, tent, s)
+  rect(ctx, 36, 26, 10, 3, tentD, s)
+  rect(ctx, 40, 29, 8, 3, tent, s)
+  px(ctx, 46, 31, tentH, s); px(ctx, 44, 31, tentH, s)
+  rect(ctx, 32, 24, 8, 4, tent, s)
+  rect(ctx, 36, 28, 6, 3, tentD, s)
+  // Bottom tentacles
+  rect(ctx, 16, 24, 4, 14, tent, s)
+  rect(ctx, 17, 36, 2, 6, tentD, s)
+  rect(ctx, 28, 24, 4, 14, tent, s)
+  rect(ctx, 29, 36, 2, 6, tentD, s)
+  rect(ctx, 22, 24, 4, 10, tentD, s)
+  rect(ctx, 23, 32, 2, 8, tent, s)
+  // Sucker marks on tentacles
+  for (let i = 0; i < 4; i++) {
+    px(ctx, 17, 26 + i * 3, tentH, s)
+    px(ctx, 29, 26 + i * 3, tentH, s)
+    px(ctx, 5 + i * 2, 24 + i, tentH, s)
+    px(ctx, 42 - i * 2, 24 + i, tentH, s)
+  }
+  // Water droplets
+  px(ctx, 10, 6, "#4A8AFF60", s); px(ctx, 38, 8, "#4A8AFF60", s)
+}
+
+function drawYggdrasilEnt(ctx: Ctx, s: number) {
+  const bark = "#3A5A2A", barkH = "#4A6A3A", barkD = "#1A3A0A"
+  groundShadow(ctx, 24, 47, 14, 3, s)
+  // Trunk body
+  rect(ctx, 12, 12, 24, 22, bark, s)
+  rect(ctx, 12, 12, 24, 5, barkH, s)
+  rect(ctx, 12, 30, 24, 4, barkD, s)
+  outline(ctx, 12, 12, 24, 22, "#0A2A00", s)
+  // Bark texture
+  px(ctx, 16, 18, barkD, s); px(ctx, 20, 20, barkH, s)
+  px(ctx, 28, 16, barkD, s); px(ctx, 32, 22, barkH, s)
+  px(ctx, 18, 26, barkD, s); px(ctx, 26, 28, barkH, s)
+  // Ring/knot patterns
+  rect(ctx, 20, 22, 4, 3, barkD, s)
+  rect(ctx, 21, 23, 2, 1, "#2A4A1A", s)
+  // Head/canopy
+  rect(ctx, 8, 0, 32, 14, "#2A5A1A", s)
+  rect(ctx, 10, -2, 28, 6, "#3A7A2A", s)
+  rect(ctx, 14, -4, 20, 4, "#4A8A3A", s)
+  rect(ctx, 18, -5, 12, 3, "#5A9A4A", s)
+  outline(ctx, 8, 0, 32, 14, "#0A3A00", s)
+  // Leaf details
+  px(ctx, 12, 2, "#6AAA5A", s); px(ctx, 20, 0, "#5A9A4A", s)
+  px(ctx, 28, -2, "#6AAA5A", s); px(ctx, 34, 4, "#4A8A3A", s)
+  px(ctx, 16, 6, "#6AAA5A", s); px(ctx, 30, 8, "#5A9A4A", s)
+  // Glowing life-force spots
+  px(ctx, 22, 4, "#88FF44", s); px(ctx, 26, 2, "#88FF44", s)
+  px(ctx, 18, 8, "#88FF44", s); px(ctx, 32, 6, "#88FF44", s)
+  // Eyes — gentle green glow
+  rect(ctx, 17, 8, 4, 3, "#88FF44", s)
+  rect(ctx, 27, 8, 4, 3, "#88FF44", s)
+  px(ctx, 18, 9, "#CCFF88", s); px(ctx, 28, 9, "#CCFF88", s)
+  // Mouth — mossy
+  rect(ctx, 21, 12, 6, 2, barkD, s)
+  // Branch arms
+  rect(ctx, 2, 14, 10, 5, bark, s)
+  rect(ctx, 36, 14, 10, 5, bark, s)
+  rect(ctx, 0, 12, 4, 4, barkH, s)
+  rect(ctx, 44, 12, 4, 4, barkH, s)
+  outline(ctx, 2, 14, 10, 5, "#0A2A00", s)
+  outline(ctx, 36, 14, 10, 5, "#0A2A00", s)
+  // Leaf tufts on branches
+  px(ctx, 1, 11, "#5A9A4A", s); px(ctx, 3, 10, "#6AAA5A", s)
+  px(ctx, 45, 11, "#5A9A4A", s); px(ctx, 46, 10, "#6AAA5A", s)
+  // Root legs
+  rect(ctx, 10, 34, 10, 10, barkD, s)
+  rect(ctx, 28, 34, 10, 10, barkD, s)
+  outline(ctx, 10, 34, 10, 10, "#0A2A00", s)
+  outline(ctx, 28, 34, 10, 10, "#0A2A00", s)
+  // Root extensions
+  px(ctx, 8, 42, barkD, s); px(ctx, 6, 44, bark, s)
+  px(ctx, 40, 42, barkD, s); px(ctx, 42, 44, bark, s)
+  // Small flowers
+  px(ctx, 14, 4, "#FF88AA", s); px(ctx, 34, 2, "#FFAA66", s)
+}
+
+function drawFenrirAlpha(ctx: Ctx, s: number) {
+  const fur = "#1A2A3A", furH = "#2A3A5A", furD = "#0A0A1A"
+  // Massive cosmic aura
+  ctx.fillStyle = "rgba(74,240,255,0.08)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 24 * s, 24 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = "rgba(100,60,180,0.06)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 20 * s, 20 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 20, 4, s)
+  // Massive body (fills most of canvas)
+  rect(ctx, 4, 16, 32, 14, fur, s)
+  rect(ctx, 4, 16, 32, 5, furH, s)
+  rect(ctx, 4, 26, 32, 4, furD, s)
+  outline(ctx, 4, 16, 32, 14, "#000010", s)
+  // Spectral fur highlights
+  px(ctx, 8, 18, furH, s); px(ctx, 16, 17, "#3A4A6A", s)
+  px(ctx, 24, 19, furH, s); px(ctx, 30, 18, "#3A4A6A", s)
+  // Head (massive, facing right)
+  rect(ctx, 30, 6, 16, 16, fur, s)
+  rect(ctx, 30, 6, 16, 5, furH, s)
+  outline(ctx, 30, 6, 16, 16, "#000010", s)
+  // Open jaws — top
+  rect(ctx, 44, 10, 4, 5, furH, s)
+  outline(ctx, 44, 10, 4, 5, "#000010", s)
+  // Bottom jaw
+  rect(ctx, 44, 16, 4, 4, furD, s)
+  outline(ctx, 44, 16, 4, 4, "#000010", s)
+  // Massive fangs
+  px(ctx, 44, 15, "#FFFFFF", s); px(ctx, 46, 15, "#FFFFFF", s)
+  px(ctx, 44, 16, "#EEEEEE", s); px(ctx, 46, 16, "#EEEEEE", s)
+  // Cosmic energy in mouth
+  rect(ctx, 44, 14, 3, 3, "#4AF0FF40", s)
+  // Eyes — blazing cosmic blue
+  rect(ctx, 34, 8, 5, 4, "#4AF0FF", s)
+  px(ctx, 35, 9, "#FFFFFF", s); px(ctx, 36, 9, "#FFFFFF", s)
+  // Eye glow trail
+  rect(ctx, 33, 7, 7, 6, "#4AF0FF20", s)
+  px(ctx, 32, 8, "#4AF0FF60", s); px(ctx, 31, 7, "#4AF0FF40", s)
+  // Ears
+  rect(ctx, 33, 2, 4, 5, fur, s); rect(ctx, 40, 2, 4, 5, fur, s)
+  rect(ctx, 34, 1, 2, 3, furH, s); rect(ctx, 41, 1, 2, 3, furH, s)
+  // Chains (broken, hanging)
+  rect(ctx, 8, 24, 1, 8, "#6A6A7A", s); rect(ctx, 10, 24, 1, 6, "#7A7A8A", s)
+  rect(ctx, 28, 24, 1, 7, "#6A6A7A", s)
+  // Spectral tail
+  rect(ctx, 0, 18, 5, 4, furD, s)
+  rect(ctx, -2, 16, 4, 4, "rgba(74,240,255,0.4)", s)
+  px(ctx, -2, 15, "rgba(74,240,255,0.3)", s)
+  px(ctx, -3, 14, "rgba(74,240,255,0.2)", s)
+  // Legs (powerful)
+  rect(ctx, 8, 30, 6, 12, furD, s); rect(ctx, 18, 30, 6, 12, furD, s)
+  rect(ctx, 26, 28, 5, 14, furD, s); rect(ctx, 36, 22, 5, 14, furD, s)
+  outline(ctx, 8, 30, 6, 12, "#000010", s); outline(ctx, 18, 30, 6, 12, "#000010", s)
+  // Cosmic particles
+  px(ctx, 2, 6, "#4AF0FF", s); px(ctx, 12, 4, "#AA66FF", s)
+  px(ctx, 20, 2, "#4AF0FF", s); px(ctx, 42, 2, "#AA66FF", s)
+  px(ctx, 6, 12, "#4AF0FF60", s); px(ctx, 38, 4, "#4AF0FF60", s)
+  px(ctx, 16, 8, "#AA66FF40", s); px(ctx, 28, 6, "#AA66FF40", s)
+}
+
+function drawSurtr(ctx: Ctx, s: number) {
+  const skin = "#6A2A0A", skinH = "#8A3A1A", skinD = "#3A0A00"
+  // Infernal aura
+  ctx.fillStyle = "rgba(255,80,0,0.1)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 24 * s, 24 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = "rgba(255,200,0,0.06)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 18 * s, 18 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 18, 3, s)
+  // Crown of eternal flame
+  rect(ctx, 12, -6, 4, 6, "#FF6600", s)
+  rect(ctx, 18, -8, 5, 8, "#FFAA00", s)
+  rect(ctx, 25, -9, 5, 9, "#FFCC00", s)
+  rect(ctx, 32, -7, 4, 7, "#FF6600", s)
+  px(ctx, 20, -8, "#FFEE00", s); px(ctx, 27, -9, "#FFFFFF", s)
+  // Head
+  rect(ctx, 12, 0, 24, 14, skin, s)
+  rect(ctx, 12, 0, 24, 4, skinH, s)
+  rect(ctx, 12, 10, 24, 4, skinD, s)
+  outline(ctx, 12, 0, 24, 14, "#1A0000", s)
+  // Eyes — pure fire
+  rect(ctx, 16, 4, 5, 4, "#FF6600", s)
+  rect(ctx, 27, 4, 5, 4, "#FF6600", s)
+  px(ctx, 17, 5, "#FFFFFF", s); px(ctx, 28, 5, "#FFFFFF", s)
+  px(ctx, 18, 5, "#FFCC00", s); px(ctx, 29, 5, "#FFCC00", s)
+  // Molten cracks on face
+  px(ctx, 15, 8, "#FF6600", s); px(ctx, 22, 6, "#FF6600", s)
+  px(ctx, 33, 8, "#FF6600", s)
+  // Magma mouth
+  rect(ctx, 18, 10, 12, 3, skinD, s)
+  rect(ctx, 20, 11, 8, 1, "#FF4400", s)
+  px(ctx, 19, 10, "#FFFFFF", s); px(ctx, 22, 10, "#FFFFFF", s)
+  px(ctx, 26, 10, "#FFFFFF", s); px(ctx, 28, 10, "#FFFFFF", s)
+  // Massive armored body
+  rect(ctx, 4, 14, 40, 18, "#2A1A0A", s)
+  rect(ctx, 4, 14, 40, 5, "#3A2A1A", s)
+  rect(ctx, 4, 28, 40, 4, "#1A0A00", s)
+  outline(ctx, 4, 14, 40, 18, "#0A0000", s)
+  // Molten veins on armor
+  px(ctx, 10, 18, "#FF6600", s); px(ctx, 18, 20, "#FFAA00", s)
+  px(ctx, 26, 17, "#FF6600", s); px(ctx, 38, 22, "#FFAA00", s)
+  px(ctx, 14, 24, "#FF6600", s); px(ctx, 30, 26, "#FF6600", s)
+  // Belt of power
+  rect(ctx, 4, 28, 40, 3, "#4A2A0A", s)
+  rect(ctx, 22, 27, 4, 5, "#C4A41A", s)
+  px(ctx, 23, 28, "#FF6600", s) // fire gem
+  // Arms
+  rect(ctx, -2, 16, 6, 18, skin, s)
+  rect(ctx, 44, 16, 6, 18, skin, s)
+  rect(ctx, -2, 16, 6, 4, skinH, s); rect(ctx, 44, 16, 6, 4, skinH, s)
+  outline(ctx, -2, 16, 6, 18, "#1A0000", s)
+  outline(ctx, 44, 16, 6, 18, "#1A0000", s)
+  // Molten cracks on arms
+  px(ctx, 0, 24, "#FF6600", s); px(ctx, 46, 26, "#FF6600", s)
+  // FLAMING GREATSWORD (left hand)
+  rect(ctx, -4, 0, 3, 32, "#6A6A7A", s)
+  rect(ctx, -4, 0, 1, 32, "#8A8A9A", s)
+  // Blade is on fire
+  rect(ctx, -5, -6, 5, 8, "#FF6600", s)
+  rect(ctx, -4, -8, 3, 6, "#FFAA00", s)
+  px(ctx, -3, -8, "#FFCC00", s)
+  // Flame along blade
+  px(ctx, -3, 4, "#FF660080", s); px(ctx, -4, 10, "#FF880060", s)
+  px(ctx, -3, 16, "#FF660080", s); px(ctx, -4, 22, "#FF880060", s)
+  // Guard
+  rect(ctx, -7, 30, 9, 3, "#C4A41A", s)
+  rect(ctx, -7, 30, 9, 1, "#E4C43A", s)
+  // Legs
+  rect(ctx, 8, 32, 12, 12, skinD, s)
+  rect(ctx, 28, 32, 12, 12, skinD, s)
+  outline(ctx, 8, 32, 12, 12, "#1A0000", s)
+  outline(ctx, 28, 32, 12, 12, "#1A0000", s)
+  // Flame particles
+  px(ctx, 6, 4, "#FF880060", s); px(ctx, 42, 6, "#FF880060", s)
+  px(ctx, 10, -2, "#FFAA0040", s); px(ctx, 38, -4, "#FFAA0040", s)
+  px(ctx, 2, 10, "#FF660040", s); px(ctx, 46, 8, "#FF660040", s)
 }
 
 // ============================================================
