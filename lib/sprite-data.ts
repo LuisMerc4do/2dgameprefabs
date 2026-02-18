@@ -94,6 +94,8 @@ export const HEAD_STYLES: HeadStyle[] = [
   { id: "oval", name: "Oval" },
   { id: "heart", name: "Heart" },
   { id: "diamond", name: "Diamond" },
+  { id: "soft", name: "Soft" },
+  { id: "fierce", name: "Fierce" },
 ]
 
 export const CHEST_STYLES: ChestStyle[] = [
@@ -102,6 +104,8 @@ export const CHEST_STYLES: ChestStyle[] = [
   { id: "athletic", name: "Athletic" },
   { id: "curvy", name: "Curvy" },
   { id: "stocky", name: "Stocky" },
+  { id: "lithe", name: "Lithe" },
+  { id: "toned", name: "Toned" },
 ]
 
 export const LEG_STYLES: LegStyle[] = [
@@ -109,6 +113,8 @@ export const LEG_STYLES: LegStyle[] = [
   { id: "muscular", name: "Muscular" },
   { id: "slender", name: "Slender" },
   { id: "armored", name: "Armored" },
+  { id: "agile", name: "Agile" },
+  { id: "tall", name: "Tall" },
 ]
 
 // ============================================================
@@ -142,9 +148,13 @@ export const EYE_COLORS: EyeColorOption[] = [
 // ============================================================
 export const SCAR_OPTIONS: ScarOption[] = [
   { id: "none", name: "None" },
-  { id: "left-eye", name: "Left Eye Scar" },
-  { id: "right-cheek", name: "Right Cheek" },
-  { id: "cross-face", name: "Cross Face" },
+  { id: "left-eye", name: "Left Eye Slash" },
+  { id: "right-cheek", name: "Claw Marks" },
+  { id: "cross-face", name: "X-Scar" },
+  { id: "jaw-slash", name: "Jaw Slash" },
+  { id: "blind-eye", name: "Blind Eye" },
+  { id: "forehead-brand", name: "Rune Brand" },
+  { id: "war-wound", name: "War Wound" },
 ]
 
 // ============================================================
@@ -296,6 +306,11 @@ export const MONSTERS: Monster[] = [
   { id: "einherjar-ghost", name: "Einherjar Ghost", role: "Armored melee", difficulty: "Easy-Medium", description: "The faded spirit of a Valhalla warrior. Still clad in spectral armor and wielding a translucent sword.", inspiration: "Valhalla / Einherjar" },
   { id: "mire-serpent", name: "Mire Serpent", role: "Ambush striker", difficulty: "Medium", description: "A venomous marsh snake that lurks half-submerged. Strikes with blinding speed and retreats into murky water.", inspiration: "Norse swamp beasts" },
   { id: "norns-shade", name: "Norn Shade", role: "Debuff caster", difficulty: "Medium", description: "A ghostly echo of the fate-weavers. Wraps enemies in threads of destiny that slow and weaken them.", inspiration: "The Norns / Fate" },
+  { id: "wulver", name: "Wulver", role: "Fast melee berserker", difficulty: "Medium", description: "A wolf-headed humanoid warrior that fights with savage claws. Hunts in small packs.", inspiration: "Norse werewolf / God of War wolf warriors" },
+  { id: "tatzelwurm", name: "Tatzelwurm", role: "Lunging serpent", difficulty: "Medium", description: "A cat-faced serpent that leaps from rock ledges. Venomous bite and constricting tail.", inspiration: "Norse lindworm / alpine dragon" },
+  { id: "revenant-archer", name: "Revenant Archer", role: "Ranged undead", difficulty: "Medium", description: "A skeletal bowman wreathed in blue soulfire. Fires spectral arrows from a bone longbow.", inspiration: "Draugr archers / Hel's army" },
+  { id: "nightstalker", name: "Nightstalker", role: "Shadow ambusher", difficulty: "Medium", description: "A living shadow with glowing red eyes. Emerges from darkness to strike then fades away.", inspiration: "Norse shadow spirits / dark elves" },
+  { id: "rock-giant", name: "Rock Giant", role: "Slow tanky brute", difficulty: "Medium", description: "A towering figure of stacked boulders animated by ancient magic. Hurls stones from range.", inspiration: "Norse stone giants / jotnar" },
 ]
 
 // ============================================================

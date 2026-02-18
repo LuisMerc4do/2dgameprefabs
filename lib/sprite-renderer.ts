@@ -189,15 +189,14 @@ function drawHead(ctx: Ctx, style: string, base: string, shad: string, hi: strin
       rect(ctx, 30, 16, 3, 4, shad, s)
       break
     case "oval":
-      // Softer, elongated oval shape
+      // Softer, elongated oval
       rect(ctx, 16, 4, 16, 17, base, s)
       rect(ctx, 15, 6, 1, 12, base, s)
       rect(ctx, 32, 6, 1, 12, base, s)
       rect(ctx, 17, 3, 14, 1, base, s)
       rect(ctx, 17, 21, 14, 1, base, s)
       outline(ctx, 16, 4, 16, 17, ol, s)
-      rect(ctx, 17, 4, 14, 3, hi, s)
-      rect(ctx, 17, 18, 14, 3, shad, s)
+      rect(ctx, 17, 4, 14, 2, hi, s)
       break
     case "heart":
       // Wider forehead tapering to chin
@@ -207,11 +206,7 @@ function drawHead(ctx: Ctx, style: string, base: string, shad: string, hi: strin
       rect(ctx, 20, 21, 8, 1, base, s)
       outline(ctx, 14, 5, 20, 10, ol, s)
       rect(ctx, 16, 15, 16, 1, ol, s)
-      rect(ctx, 14, 5, 20, 3, hi, s)
-      rect(ctx, 20, 19, 8, 2, shad, s)
-      // Soft cheek highlights
-      rect(ctx, 15, 10, 2, 3, hi + "60", s)
-      rect(ctx, 31, 10, 2, 3, hi + "60", s)
+      rect(ctx, 14, 5, 20, 2, hi, s)
       break
     case "diamond":
       // Narrow top/bottom, wide cheekbones
@@ -220,11 +215,35 @@ function drawHead(ctx: Ctx, style: string, base: string, shad: string, hi: strin
       rect(ctx, 17, 16, 14, 4, base, s)
       rect(ctx, 19, 20, 10, 2, base, s)
       outline(ctx, 15, 8, 18, 8, ol, s)
-      rect(ctx, 18, 4, 12, 3, hi, s)
-      rect(ctx, 19, 18, 10, 2, shad, s)
-      // Sharp cheekbone highlights
-      rect(ctx, 15, 9, 3, 2, hi + "60", s)
-      rect(ctx, 30, 9, 3, 2, hi + "60", s)
+      rect(ctx, 18, 4, 12, 2, hi, s)
+      break
+    case "soft":
+      // Soft feminine face — rounded, slightly narrower
+      rect(ctx, 16, 5, 16, 15, base, s)
+      rect(ctx, 15, 7, 1, 10, base, s)
+      rect(ctx, 32, 7, 1, 10, base, s)
+      rect(ctx, 17, 4, 14, 2, base, s)
+      rect(ctx, 17, 20, 14, 1, base, s)
+      outline(ctx, 16, 5, 16, 15, ol, s)
+      rect(ctx, 17, 5, 14, 2, hi, s)
+      // Soft cheek color
+      rect(ctx, 16, 13, 2, 2, hi + "30", s)
+      rect(ctx, 30, 13, 2, 2, hi + "30", s)
+      break
+    case "fierce":
+      // Fierce feminine face — angular jaw, strong cheekbones
+      rect(ctx, 15, 5, 18, 14, base, s)
+      rect(ctx, 14, 8, 1, 8, base, s)
+      rect(ctx, 33, 8, 1, 8, base, s)
+      rect(ctx, 17, 19, 14, 2, base, s)
+      outline(ctx, 15, 5, 18, 14, ol, s)
+      rect(ctx, 15, 5, 18, 2, hi, s)
+      // Defined cheekbones
+      rect(ctx, 15, 10, 2, 2, hi + "40", s)
+      rect(ctx, 31, 10, 2, 2, hi + "40", s)
+      // Strong jaw hint
+      rect(ctx, 16, 16, 2, 2, ol + "20", s)
+      rect(ctx, 30, 16, 2, 2, ol + "20", s)
       break
     default: // round
       rect(ctx, 15, 6, 18, 14, base, s)
@@ -334,23 +353,65 @@ function drawBeard(ctx: Ctx, style: string, color: string, s: number) {
 }
 
 function drawScar(ctx: Ctx, style: string, s: number) {
+  const sc = "#BB7766" // main scar color — pinkish raised tissue
+  const sd = "#995544" // darker scar edge
   switch (style) {
     case "left-eye":
-      px(ctx, 18, 11, "#CC8888", s)
-      px(ctx, 19, 12, "#CC8888", s)
-      px(ctx, 19, 13, "#CC8888", s)
-      px(ctx, 18, 14, "#CC8888", s)
+      // Deep slash across left eye — diagonal, thick
+      px(ctx, 17, 9, sd, s); px(ctx, 18, 10, sc, s)
+      px(ctx, 18, 11, sc, s); px(ctx, 19, 12, sc, s)
+      px(ctx, 19, 13, sc, s); px(ctx, 20, 14, sc, s)
+      px(ctx, 20, 15, sd, s)
+      // Raised tissue highlight next to scar
+      px(ctx, 18, 9, sd + "60", s); px(ctx, 20, 13, sd + "60", s)
       break
     case "right-cheek":
-      px(ctx, 31, 13, "#CC8888", s)
-      px(ctx, 32, 14, "#CC8888", s)
-      px(ctx, 31, 15, "#CC8888", s)
+      // Three claw marks raked across right cheek
+      px(ctx, 29, 11, sc, s); px(ctx, 30, 12, sc, s); px(ctx, 31, 13, sc, s); px(ctx, 32, 14, sd, s)
+      px(ctx, 30, 11, sc, s); px(ctx, 31, 12, sc, s); px(ctx, 32, 13, sd, s)
+      px(ctx, 31, 11, sd, s); px(ctx, 32, 12, sd, s)
       break
     case "cross-face":
-      for (let i = 0; i < 6; i++) {
-        px(ctx, 18 + i, 11 + i, "#CC8888", s)
-        px(ctx, 30 - i, 11 + i, "#CC8888", s)
+      // X-shaped crossing scars over face
+      for (let i = 0; i < 7; i++) {
+        px(ctx, 18 + i, 10 + i, sc, s)
+        px(ctx, 31 - i, 10 + i, sc, s)
       }
+      // Thicker at the cross point
+      px(ctx, 24, 13, sd, s); px(ctx, 23, 13, sd, s); px(ctx, 25, 13, sd, s)
+      break
+    case "jaw-slash":
+      // Long slash across the jaw from left to right
+      px(ctx, 16, 16, sd, s); px(ctx, 17, 16, sc, s); px(ctx, 18, 17, sc, s)
+      px(ctx, 19, 17, sc, s); px(ctx, 20, 17, sc, s); px(ctx, 21, 17, sc, s)
+      px(ctx, 22, 18, sc, s); px(ctx, 23, 18, sc, s); px(ctx, 24, 18, sc, s)
+      px(ctx, 25, 17, sc, s); px(ctx, 26, 17, sc, s); px(ctx, 27, 17, sd, s)
+      break
+    case "blind-eye":
+      // Scarred shut left eye — eye area sealed with scar tissue
+      rect(ctx, 19, 11, 4, 4, sc, s)
+      px(ctx, 19, 11, sd, s); px(ctx, 22, 11, sd, s)
+      px(ctx, 20, 12, sd, s); px(ctx, 21, 13, sd, s)
+      // Stitch marks
+      px(ctx, 18, 12, sd + "80", s); px(ctx, 23, 12, sd + "80", s)
+      px(ctx, 18, 14, sd + "80", s); px(ctx, 23, 14, sd + "80", s)
+      break
+    case "forehead-brand":
+      // Burned rune brand on forehead
+      px(ctx, 22, 7, sd, s); px(ctx, 23, 7, sd, s); px(ctx, 24, 7, sd, s)
+      px(ctx, 22, 8, sc, s); px(ctx, 24, 8, sc, s)
+      px(ctx, 22, 9, sd, s); px(ctx, 23, 9, sd, s); px(ctx, 24, 9, sd, s)
+      px(ctx, 23, 8, "#884433", s) // burn center
+      break
+    case "war-wound":
+      // Ragged gash down right side of face with stitch marks
+      px(ctx, 30, 8, sd, s); px(ctx, 30, 9, sc, s); px(ctx, 31, 10, sc, s)
+      px(ctx, 31, 11, sc, s); px(ctx, 31, 12, sc, s); px(ctx, 30, 13, sc, s)
+      px(ctx, 30, 14, sc, s); px(ctx, 30, 15, sd, s)
+      // Stitch marks across wound
+      px(ctx, 29, 10, sd + "80", s); px(ctx, 32, 10, sd + "80", s)
+      px(ctx, 29, 12, sd + "80", s); px(ctx, 32, 12, sd + "80", s)
+      px(ctx, 29, 14, sd + "80", s); px(ctx, 32, 14, sd + "80", s)
       break
   }
 }
@@ -427,6 +488,39 @@ function drawTorso(ctx: Ctx, bodyType: string, chestStyle: string, base: string,
     px(ctx, 24, 30, shad, s)
     rect(ctx, 17, 32, 14, 2, "#4A3A2A", s)
     rect(ctx, 17, 32, 14, 1, "#5A4A3A", s)
+  } else if (isFemale && chestStyle === "lithe") {
+    // Lithe female torso — narrow, graceful
+    rect(ctx, 15, 21, 18, 12, base, s)
+    outline(ctx, 15, 21, 18, 12, ol, s)
+    rect(ctx, 15, 21, 18, 3, hi, s)
+    rect(ctx, 15, 30, 18, 3, shad + "40", s)
+    rect(ctx, 18, 22, 4, 2, shad + "30", s)
+    rect(ctx, 26, 22, 4, 2, shad + "30", s)
+    rect(ctx, 16, 27, 1, 3, shad + "20", s)
+    rect(ctx, 32, 27, 1, 3, shad + "20", s)
+    px(ctx, 24, 30, shad, s)
+    rect(ctx, 18, 32, 12, 2, "#4A3A2A", s)
+    rect(ctx, 18, 32, 12, 1, "#5A4A3A", s)
+  } else if (isFemale && chestStyle === "toned") {
+    // Toned female torso — athletic with subtle muscle definition
+    const x = isWide ? 12 : 13
+    const w = isWide ? 24 : 22
+    rect(ctx, x, 21, w, 12, base, s)
+    outline(ctx, x, 21, w, 12, ol, s)
+    rect(ctx, x, 21, w, 3, hi, s)
+    rect(ctx, x, 30, w, 3, shad + "40", s)
+    rect(ctx, x + 3, 22, 5, 2, shad + "35", s)
+    rect(ctx, x + w - 8, 22, 5, 2, shad + "35", s)
+    rect(ctx, x + 4, 22, 3, 1, hi + "25", s)
+    rect(ctx, x + w - 7, 22, 3, 1, hi + "25", s)
+    // Subtle abs
+    rect(ctx, x + (w >> 1) - 2, 27, 1, 3, shad + "25", s)
+    rect(ctx, x + (w >> 1) + 2, 27, 1, 3, shad + "25", s)
+    rect(ctx, x + 1, 27, 1, 3, shad + "20", s)
+    rect(ctx, x + w - 2, 27, 1, 3, shad + "20", s)
+    px(ctx, 24, 30, shad, s)
+    rect(ctx, 17, 32, 14, 2, "#4A3A2A", s)
+    rect(ctx, 17, 32, 14, 1, "#5A4A3A", s)
   } else if (chestStyle === "athletic") {
     // Athletic male — moderate width with defined muscle
     rect(ctx, 13, 21, 22, 12, base, s)
@@ -490,18 +584,16 @@ function drawTorso(ctx: Ctx, bodyType: string, chestStyle: string, base: string,
 
 function drawArms(ctx: Ctx, bodyType: string, base: string, shad: string, hi: string, s: number) {
   const ol = darken(shad, 30)
-  if (bodyType === "warrior" || bodyType === "valkyrie") {
-    // Left arm
+  const isFemale = bodyType === "shieldmaiden" || bodyType === "valkyrie"
+  if (bodyType === "warrior") {
+    // Warrior: big arms at x=6 and x=37 (matches torso x=11)
     rect(ctx, 6, 21, 5, 14, base, s)
     rect(ctx, 6, 21, 5, 3, hi, s)
     rect(ctx, 6, 32, 5, 3, shad, s)
     outline(ctx, 6, 21, 5, 14, ol, s)
-    // Bicep highlight
     rect(ctx, 7, 23, 3, 2, hi + "80", s)
-    // Hand
     rect(ctx, 6, 35, 5, 3, base, s)
     rect(ctx, 6, 37, 5, 1, shad, s)
-    // Right arm
     rect(ctx, 37, 21, 5, 14, base, s)
     rect(ctx, 37, 21, 5, 3, hi, s)
     rect(ctx, 37, 32, 5, 3, shad, s)
@@ -509,15 +601,44 @@ function drawArms(ctx: Ctx, bodyType: string, base: string, shad: string, hi: st
     rect(ctx, 38, 23, 3, 2, hi + "80", s)
     rect(ctx, 37, 35, 5, 3, base, s)
     rect(ctx, 37, 37, 5, 1, shad, s)
-  } else {
-    // Left arm
+  } else if (bodyType === "valkyrie") {
+    // Valkyrie: arms start flush with torso (x=12, w=24 -> right side at x=36)
+    rect(ctx, 8, 21, 4, 14, base, s)
+    rect(ctx, 8, 21, 4, 3, hi, s)
+    rect(ctx, 8, 32, 4, 3, shad, s)
+    outline(ctx, 8, 21, 4, 14, ol, s)
+    rect(ctx, 9, 23, 2, 2, hi + "80", s)
+    rect(ctx, 8, 35, 4, 3, base, s)
+    rect(ctx, 8, 37, 4, 1, shad, s)
+    rect(ctx, 36, 21, 4, 14, base, s)
+    rect(ctx, 36, 21, 4, 3, hi, s)
+    rect(ctx, 36, 32, 4, 3, shad, s)
+    outline(ctx, 36, 21, 4, 14, ol, s)
+    rect(ctx, 37, 23, 2, 2, hi + "80", s)
+    rect(ctx, 36, 35, 4, 3, base, s)
+    rect(ctx, 36, 37, 4, 1, shad, s)
+  } else if (isFemale) {
+    // Shieldmaiden: slimmer arms matching torso (x=14, w=20)
     rect(ctx, 10, 21, 4, 12, base, s)
     rect(ctx, 10, 21, 4, 2, hi, s)
     rect(ctx, 10, 31, 4, 2, shad, s)
     outline(ctx, 10, 21, 4, 12, ol, s)
     rect(ctx, 10, 33, 4, 3, base, s)
     rect(ctx, 10, 35, 4, 1, shad, s)
-    // Right arm
+    rect(ctx, 34, 21, 4, 12, base, s)
+    rect(ctx, 34, 21, 4, 2, hi, s)
+    rect(ctx, 34, 31, 4, 2, shad, s)
+    outline(ctx, 34, 21, 4, 12, ol, s)
+    rect(ctx, 34, 33, 4, 3, base, s)
+    rect(ctx, 34, 35, 4, 1, shad, s)
+  } else {
+    // Scout / default
+    rect(ctx, 10, 21, 4, 12, base, s)
+    rect(ctx, 10, 21, 4, 2, hi, s)
+    rect(ctx, 10, 31, 4, 2, shad, s)
+    outline(ctx, 10, 21, 4, 12, ol, s)
+    rect(ctx, 10, 33, 4, 3, base, s)
+    rect(ctx, 10, 35, 4, 1, shad, s)
     rect(ctx, 34, 21, 4, 12, base, s)
     rect(ctx, 34, 21, 4, 2, hi, s)
     rect(ctx, 34, 31, 4, 2, shad, s)
@@ -560,11 +681,33 @@ function drawLegs(ctx: Ctx, style: string, base: string, shad: string, hi: strin
     rect(ctx, 26, 33, 7, 2, hi, s)
     rect(ctx, 26, 41, 7, 2, shad, s)
     outline(ctx, 26, 33, 7, 10, ol, s)
-    // Plate highlights
     rect(ctx, 16, 35, 2, 1, hi + "50", s)
     rect(ctx, 27, 35, 2, 1, hi + "50", s)
     rect(ctx, 16, 38, 2, 1, shad + "40", s)
     rect(ctx, 27, 38, 2, 1, shad + "40", s)
+  } else if (style === "agile") {
+    // Agile legs — narrow, toned for female builds
+    rect(ctx, 17, 33, 5, 10, base, s)
+    rect(ctx, 17, 33, 5, 2, hi, s)
+    rect(ctx, 17, 41, 5, 2, shad + "40", s)
+    outline(ctx, 17, 33, 5, 10, ol, s)
+    rect(ctx, 26, 33, 5, 10, base, s)
+    rect(ctx, 26, 33, 5, 2, hi, s)
+    rect(ctx, 26, 41, 5, 2, shad + "40", s)
+    outline(ctx, 26, 33, 5, 10, ol, s)
+    // Subtle calf definition
+    rect(ctx, 18, 37, 3, 1, hi + "30", s)
+    rect(ctx, 27, 37, 3, 1, hi + "30", s)
+  } else if (style === "tall") {
+    // Tall legs — longer, elegant proportions
+    rect(ctx, 16, 32, 6, 12, base, s)
+    rect(ctx, 16, 32, 6, 2, hi, s)
+    rect(ctx, 16, 42, 6, 2, shad + "40", s)
+    outline(ctx, 16, 32, 6, 12, ol, s)
+    rect(ctx, 26, 32, 6, 12, base, s)
+    rect(ctx, 26, 32, 6, 2, hi, s)
+    rect(ctx, 26, 42, 6, 2, shad + "40", s)
+    outline(ctx, 26, 32, 6, 12, ol, s)
   } else {
     rect(ctx, 16, 33, 6, 10, base, s)
     rect(ctx, 16, 33, 6, 2, hi, s)
