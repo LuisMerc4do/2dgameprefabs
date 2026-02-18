@@ -2434,6 +2434,11 @@ export function drawMonster(ctx: Ctx, monsterId: string, scale: number = 4) {
     case "yggdrasil-ent": drawYggdrasilEnt(ctx, scale); break
     case "fenrir-alpha": drawFenrirAlpha(ctx, scale); break
     case "surtr-the-destroyer": drawSurtr(ctx, scale); break
+    case "burial-wight": drawBurialWight(ctx, scale); break
+    case "ice-sprite": drawIceSprite(ctx, scale); break
+    case "einherjar-ghost": drawEinherjarGhost(ctx, scale); break
+    case "mire-serpent": drawMireSerpent(ctx, scale); break
+    case "norns-shade": drawNornShade(ctx, scale); break
   }
 }
 
@@ -3516,6 +3521,311 @@ function drawSurtr(ctx: Ctx, s: number) {
   px(ctx, 6, 4, "#FF880060", s); px(ctx, 42, 6, "#FF880060", s)
   px(ctx, 10, -2, "#FFAA0040", s); px(ctx, 38, -4, "#FFAA0040", s)
   px(ctx, 2, 10, "#FF660040", s); px(ctx, 46, 8, "#FF660040", s)
+}
+
+function drawBurialWight(ctx: Ctx, s: number) {
+  const wrap = "#5A5040", wrapH = "#6A6050", wrapD = "#3A3020"
+  const bone = "#AAA888", boneD = "#7A7A5A"
+  groundShadow(ctx, 24, 47, 9, 2, s)
+  // Tattered grave-cloth body
+  rect(ctx, 14, 18, 20, 22, wrap, s)
+  rect(ctx, 14, 18, 20, 4, wrapH, s)
+  rect(ctx, 14, 36, 20, 4, wrapD, s)
+  outline(ctx, 14, 18, 20, 22, "#1A1A10", s)
+  // Ragged bottom edge
+  px(ctx, 14, 40, wrapD, s); px(ctx, 18, 41, wrapD, s)
+  px(ctx, 26, 41, wrapD, s); px(ctx, 33, 40, wrapD, s)
+  // Wrapping strips
+  rect(ctx, 16, 22, 16, 1, wrapH, s)
+  rect(ctx, 16, 26, 16, 1, wrapD, s)
+  rect(ctx, 16, 30, 16, 1, wrapH, s)
+  rect(ctx, 16, 34, 16, 1, wrapD, s)
+  // Skull head — partially wrapped
+  rect(ctx, 16, 4, 16, 14, bone, s)
+  rect(ctx, 16, 4, 16, 3, "#BBBB99", s)
+  rect(ctx, 16, 15, 16, 3, boneD, s)
+  outline(ctx, 16, 4, 16, 14, "#4A4A2A", s)
+  // Wrapping over half the skull
+  rect(ctx, 16, 4, 8, 6, wrap, s)
+  rect(ctx, 16, 4, 8, 2, wrapH, s)
+  // Empty eye sockets — one covered by wrap, one exposed with faint red glow
+  rect(ctx, 26, 8, 4, 3, "#1A1A0A", s)
+  px(ctx, 27, 9, "#FF444480", s) // faint red glow
+  // Jaw
+  rect(ctx, 20, 14, 8, 3, boneD, s)
+  px(ctx, 21, 14, "#BBBB99", s); px(ctx, 24, 14, "#BBBB99", s); px(ctx, 26, 14, "#BBBB99", s)
+  // Bony claw arms
+  rect(ctx, 9, 20, 5, 14, wrap, s)
+  rect(ctx, 34, 20, 5, 14, wrap, s)
+  outline(ctx, 9, 20, 5, 14, "#1A1A10", s)
+  outline(ctx, 34, 20, 5, 14, "#1A1A10", s)
+  // Exposed bone fingers
+  px(ctx, 9, 34, bone, s); px(ctx, 11, 35, bone, s); px(ctx, 13, 34, bone, s)
+  px(ctx, 34, 34, bone, s); px(ctx, 36, 35, bone, s); px(ctx, 38, 34, bone, s)
+  // Dirt particles clinging to body
+  px(ctx, 18, 24, "#3A3020", s); px(ctx, 28, 28, "#3A3020", s)
+  px(ctx, 22, 32, "#4A4030", s); px(ctx, 30, 22, "#4A4030", s)
+  // Faint grave dust
+  px(ctx, 6, 38, "#5A504040", s); px(ctx, 42, 36, "#5A504040", s)
+}
+
+function drawIceSprite(ctx: Ctx, s: number) {
+  const body = "#B0E0FF", bodyH = "#D0F0FF", bodyD = "#70A0CC"
+  // Faint icy glow aura
+  ctx.fillStyle = "rgba(176,224,255,0.1)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 22 * s, 14 * s, 14 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 6, 1, s)
+  // Tiny body — round, floating at y ~16
+  rect(ctx, 18, 14, 12, 12, body, s)
+  rect(ctx, 18, 14, 12, 3, bodyH, s)
+  rect(ctx, 18, 23, 12, 3, bodyD, s)
+  outline(ctx, 18, 14, 12, 12, "#4A7A9A", s)
+  // Big expressive eyes
+  rect(ctx, 20, 17, 3, 3, "#FFFFFF", s)
+  rect(ctx, 25, 17, 3, 3, "#FFFFFF", s)
+  px(ctx, 21, 18, "#2244AA", s) // left pupil
+  px(ctx, 26, 18, "#2244AA", s) // right pupil
+  // Little smile
+  px(ctx, 22, 21, bodyD, s); px(ctx, 23, 22, bodyD, s); px(ctx, 24, 22, bodyD, s); px(ctx, 25, 21, bodyD, s)
+  // Crystalline wings (left)
+  rect(ctx, 10, 10, 8, 6, "#D0F0FF80", s)
+  rect(ctx, 8, 12, 4, 3, "#E0F8FF60", s)
+  outline(ctx, 10, 10, 8, 6, "#70A0CC60", s)
+  px(ctx, 12, 11, "#FFFFFF80", s) // wing sparkle
+  // Crystalline wings (right)
+  rect(ctx, 30, 10, 8, 6, "#D0F0FF80", s)
+  rect(ctx, 36, 12, 4, 3, "#E0F8FF60", s)
+  outline(ctx, 30, 10, 8, 6, "#70A0CC60", s)
+  px(ctx, 34, 11, "#FFFFFF80", s)
+  // Tiny arms
+  rect(ctx, 15, 18, 3, 4, bodyD, s)
+  rect(ctx, 30, 18, 3, 4, bodyD, s)
+  // Tiny legs dangling
+  rect(ctx, 20, 26, 2, 4, bodyD, s)
+  rect(ctx, 26, 26, 2, 4, bodyD, s)
+  // Ice shards being held / orbiting
+  rect(ctx, 12, 20, 2, 4, "#E0F8FF", s)
+  px(ctx, 12, 19, "#FFFFFF", s) // shard tip
+  rect(ctx, 34, 18, 2, 4, "#E0F8FF", s)
+  px(ctx, 34, 17, "#FFFFFF", s)
+  // Sparkle particles
+  px(ctx, 8, 8, "#FFFFFF", s); px(ctx, 38, 6, "#FFFFFF", s)
+  px(ctx, 14, 6, "#D0F0FF", s); px(ctx, 34, 28, "#D0F0FF", s)
+  px(ctx, 6, 18, "#B0E0FF80", s); px(ctx, 42, 14, "#B0E0FF80", s)
+}
+
+function drawEinherjarGhost(ctx: Ctx, s: number) {
+  const ghost = "#6688AA", ghostH = "#88AACC", ghostD = "#446688"
+  const armor = "#7A8A9A", armorH = "#9AAABB", armorD = "#5A6A7A"
+  // Spectral aura
+  ctx.fillStyle = "rgba(100,140,180,0.1)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 28 * s, 14 * s, 18 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 10, 2, s)
+  // Head — ghostly, translucent feel
+  rect(ctx, 16, 4, 16, 14, ghost, s)
+  rect(ctx, 16, 4, 16, 3, ghostH, s)
+  rect(ctx, 16, 15, 16, 3, ghostD, s)
+  outline(ctx, 16, 4, 16, 14, "#2A4A6A", s)
+  // Spectral eyes — white, glowing
+  rect(ctx, 19, 8, 4, 3, "#DDEEFF", s)
+  rect(ctx, 26, 8, 4, 3, "#DDEEFF", s)
+  px(ctx, 20, 9, "#FFFFFF", s); px(ctx, 27, 9, "#FFFFFF", s)
+  // Ghostly helmet
+  rect(ctx, 14, 0, 20, 8, armorD, s)
+  rect(ctx, 14, 0, 20, 3, armor, s)
+  outline(ctx, 14, 0, 20, 8, "#3A4A5A", s)
+  // Nose guard
+  rect(ctx, 23, 4, 2, 8, armorD, s)
+  // Spectral chainmail torso
+  rect(ctx, 12, 18, 24, 14, armor, s)
+  rect(ctx, 12, 18, 24, 4, armorH, s)
+  rect(ctx, 12, 28, 24, 4, armorD, s)
+  outline(ctx, 12, 18, 24, 14, "#3A4A5A", s)
+  // Chainmail texture
+  for (let iy = 21; iy < 32; iy += 2)
+    for (let ix = 13; ix < 35; ix += 2)
+      px(ctx, ix, iy, ghostD, s)
+  // Shoulder pauldrons
+  rect(ctx, 9, 17, 5, 5, armorD, s)
+  rect(ctx, 34, 17, 5, 5, armorD, s)
+  outline(ctx, 9, 17, 5, 5, "#3A4A5A", s)
+  outline(ctx, 34, 17, 5, 5, "#3A4A5A", s)
+  // Arms
+  rect(ctx, 8, 22, 4, 12, ghost, s)
+  rect(ctx, 36, 22, 4, 12, ghost, s)
+  outline(ctx, 8, 22, 4, 12, "#2A4A6A", s)
+  outline(ctx, 36, 22, 4, 12, "#2A4A6A", s)
+  // Translucent sword in right hand
+  rect(ctx, 38, 8, 2, 24, "#AABBDD", s)
+  rect(ctx, 38, 8, 1, 24, "#CCDDEE", s)
+  rect(ctx, 38, 6, 2, 3, "#DDEEFF", s) // tip glow
+  rect(ctx, 36, 32, 6, 2, "#9AAABB", s) // guard
+  // Spectral legs — fading at the bottom
+  rect(ctx, 15, 32, 6, 8, ghost, s)
+  rect(ctx, 27, 32, 6, 8, ghost, s)
+  outline(ctx, 15, 32, 6, 8, "#2A4A6A", s)
+  outline(ctx, 27, 32, 6, 8, "#2A4A6A", s)
+  // Fade-out at feet (ghostly dissolve)
+  rect(ctx, 15, 38, 6, 2, ghostD + "80", s)
+  rect(ctx, 27, 38, 6, 2, ghostD + "80", s)
+  rect(ctx, 16, 40, 4, 2, ghostD + "40", s)
+  rect(ctx, 28, 40, 4, 2, ghostD + "40", s)
+  // Spectral particles drifting up
+  px(ctx, 10, 6, "#88AACC60", s); px(ctx, 38, 4, "#88AACC60", s)
+  px(ctx, 14, 2, "#AACCEE40", s); px(ctx, 34, 0, "#AACCEE40", s)
+}
+
+function drawMireSerpent(ctx: Ctx, s: number) {
+  const scale1 = "#3A5A2A", scaleH = "#4A7A3A", scaleD = "#1A3A0A"
+  const belly = "#6A7A3A", bellyH = "#8A9A5A"
+  // Murky water pool
+  ctx.fillStyle = "rgba(40,60,30,0.2)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 42 * s, 20 * s, 6 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // Water ripple rings
+  ctx.strokeStyle = "rgba(80,100,60,0.25)"
+  ctx.lineWidth = s * 0.5
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 42 * s, 16 * s, 4 * s, 0, 0, Math.PI * 2)
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 42 * s, 12 * s, 3 * s, 0, 0, Math.PI * 2)
+  ctx.stroke()
+  // Serpent body coil rising from water — S-shape
+  // Lower coil (partially in water)
+  rect(ctx, 18, 34, 14, 6, scale1, s)
+  rect(ctx, 18, 34, 14, 2, scaleH, s)
+  rect(ctx, 18, 38, 14, 2, scaleD, s)
+  outline(ctx, 18, 34, 14, 6, "#0A2A00", s)
+  // Belly stripe on lower coil
+  rect(ctx, 22, 35, 6, 4, belly, s)
+  // Mid coil curving left
+  rect(ctx, 10, 24, 14, 6, scale1, s)
+  rect(ctx, 10, 24, 14, 2, scaleH, s)
+  rect(ctx, 10, 28, 14, 2, scaleD, s)
+  outline(ctx, 10, 24, 14, 6, "#0A2A00", s)
+  rect(ctx, 14, 25, 6, 4, belly, s)
+  // Connecting segment going up-right
+  rect(ctx, 22, 26, 6, 10, scale1, s)
+  rect(ctx, 22, 26, 2, 10, scaleH, s)
+  outline(ctx, 22, 26, 6, 10, "#0A2A00", s)
+  // Upper coil going right
+  rect(ctx, 24, 16, 14, 6, scale1, s)
+  rect(ctx, 24, 16, 14, 2, scaleH, s)
+  rect(ctx, 24, 20, 14, 2, scaleD, s)
+  outline(ctx, 24, 16, 14, 6, "#0A2A00", s)
+  rect(ctx, 28, 17, 6, 4, belly, s)
+  // Connecting going up-left
+  rect(ctx, 20, 12, 6, 6, scale1, s)
+  rect(ctx, 20, 12, 2, 6, scaleH, s)
+  outline(ctx, 20, 12, 6, 6, "#0A2A00", s)
+  // Head — wedge-shaped, menacing
+  rect(ctx, 14, 4, 14, 10, scale1, s)
+  rect(ctx, 14, 4, 14, 3, scaleH, s)
+  rect(ctx, 14, 11, 14, 3, scaleD, s)
+  outline(ctx, 14, 4, 14, 10, "#0A2A00", s)
+  // Snout extension
+  rect(ctx, 12, 6, 4, 6, scale1, s)
+  rect(ctx, 12, 6, 4, 2, scaleH, s)
+  outline(ctx, 12, 6, 4, 6, "#0A2A00", s)
+  // Eyes — slit pupils, yellow
+  rect(ctx, 16, 6, 3, 3, "#CCCC44", s)
+  rect(ctx, 22, 6, 3, 3, "#CCCC44", s)
+  px(ctx, 17, 7, "#1A1A00", s) // slit pupil
+  px(ctx, 23, 7, "#1A1A00", s)
+  // Fangs
+  px(ctx, 13, 11, "#EEEECC", s); px(ctx, 15, 12, "#EEEECC", s)
+  px(ctx, 25, 12, "#EEEECC", s); px(ctx, 27, 11, "#EEEECC", s)
+  // Venom drip
+  px(ctx, 13, 12, "#88DD4480", s); px(ctx, 27, 12, "#88DD4480", s)
+  // Scale pattern highlights
+  for (let i = 0; i < 5; i++) {
+    px(ctx, 16 + i * 3, 5, scaleH, s)
+    px(ctx, 26 + i * 2, 17, scaleH, s)
+    px(ctx, 12 + i * 2, 25, scaleH, s)
+    px(ctx, 20 + i * 2, 35, scaleH, s)
+  }
+  // Splash droplets
+  px(ctx, 8, 36, "#4A6A3A60", s); px(ctx, 40, 34, "#4A6A3A60", s)
+  px(ctx, 6, 40, "#3A5A2A40", s); px(ctx, 42, 38, "#3A5A2A40", s)
+}
+
+function drawNornShade(ctx: Ctx, s: number) {
+  const robe = "#3A2A4A", robeH = "#5A4A6A", robeD = "#1A0A2A"
+  const thread = "#D4A44A", threadH = "#FFD080"
+  // Fate-thread aura
+  ctx.fillStyle = "rgba(212,164,74,0.06)"
+  ctx.beginPath()
+  ctx.ellipse(24 * s, 24 * s, 18 * s, 20 * s, 0, 0, Math.PI * 2)
+  ctx.fill()
+  groundShadow(ctx, 24, 47, 10, 2, s)
+  // Hooded robe — tall, spectral
+  rect(ctx, 14, 14, 20, 28, robe, s)
+  rect(ctx, 14, 14, 20, 5, robeH, s)
+  rect(ctx, 14, 38, 20, 4, robeD, s)
+  outline(ctx, 14, 14, 20, 28, "#000010", s)
+  // Robe folds
+  rect(ctx, 20, 22, 1, 16, robeD, s)
+  rect(ctx, 27, 20, 1, 18, robeD, s)
+  // Ragged hem
+  px(ctx, 14, 42, robeD, s); px(ctx, 18, 43, robeD, s)
+  px(ctx, 26, 43, robeD, s); px(ctx, 33, 42, robeD, s)
+  // Hood — large, deep
+  rect(ctx, 12, 2, 24, 16, robe, s)
+  rect(ctx, 14, 0, 20, 6, robeD, s)
+  rect(ctx, 16, -1, 16, 4, robe, s)
+  outline(ctx, 12, 2, 24, 16, "#000010", s)
+  // Deep shadow inside hood
+  rect(ctx, 16, 6, 16, 10, "#0A0020", s)
+  // Faint ghostly face within — only three pale dots for eyes and mouth
+  px(ctx, 20, 9, "#AA88CC", s) // left eye
+  px(ctx, 28, 9, "#AA88CC", s) // right eye
+  px(ctx, 24, 13, "#8866AA60", s) // mouth
+  // Arms extending from robe, thin and spectral
+  rect(ctx, 8, 20, 6, 10, robe, s)
+  rect(ctx, 34, 20, 6, 10, robe, s)
+  outline(ctx, 8, 20, 6, 10, "#000010", s)
+  outline(ctx, 34, 20, 6, 10, "#000010", s)
+  // Ghostly hands
+  rect(ctx, 7, 30, 4, 3, "#8A7AAA", s)
+  rect(ctx, 37, 30, 4, 3, "#8A7AAA", s)
+  // Fate threads — golden strands between the hands
+  ctx.strokeStyle = thread
+  ctx.lineWidth = s * 0.8
+  // Thread 1 (upper arc)
+  ctx.beginPath()
+  ctx.moveTo(9 * s, 31 * s)
+  ctx.bezierCurveTo(16 * s, 22 * s, 32 * s, 22 * s, 39 * s, 31 * s)
+  ctx.stroke()
+  // Thread 2 (lower arc)
+  ctx.strokeStyle = threadH
+  ctx.lineWidth = s * 0.5
+  ctx.beginPath()
+  ctx.moveTo(9 * s, 32 * s)
+  ctx.bezierCurveTo(16 * s, 26 * s, 32 * s, 26 * s, 39 * s, 32 * s)
+  ctx.stroke()
+  // Thread knots / nodes
+  px(ctx, 18, 23, thread, s); px(ctx, 24, 22, threadH, s); px(ctx, 30, 23, thread, s)
+  // Dangling threads below hands
+  ctx.strokeStyle = thread + "80"
+  ctx.lineWidth = s * 0.4
+  ctx.beginPath()
+  ctx.moveTo(9 * s, 33 * s); ctx.lineTo(7 * s, 40 * s)
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.moveTo(39 * s, 33 * s); ctx.lineTo(41 * s, 40 * s)
+  ctx.stroke()
+  // Floating fate runes near the threads
+  px(ctx, 14, 20, "#D4A44A80", s); px(ctx, 34, 20, "#D4A44A80", s)
+  px(ctx, 20, 18, "#FFD08060", s); px(ctx, 28, 18, "#FFD08060", s)
+  // Spectral particles drifting
+  px(ctx, 6, 10, "#AA88CC40", s); px(ctx, 42, 8, "#AA88CC40", s)
+  px(ctx, 4, 24, "#D4A44A30", s); px(ctx, 44, 22, "#D4A44A30", s)
 }
 
 // ============================================================

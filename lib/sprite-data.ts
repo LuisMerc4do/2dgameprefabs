@@ -291,6 +291,11 @@ export const MONSTERS: Monster[] = [
   { id: "yggdrasil-ent", name: "Yggdrasil Ent", role: "Forest guardian", difficulty: "Easy-Medium", description: "An ancient tree spirit animated by the World Tree's power. Slow but extremely tough.", inspiration: "Yggdrasil" },
   { id: "fenrir-alpha", name: "Fenrir the World Ender", role: "BOSS - Giant wolf", difficulty: "Boss", description: "The legendary wolf Fenrir, chained no more. Massive spectral wolf with cosmic fury, moon in its jaws.", inspiration: "Fenrir" },
   { id: "surtr-the-destroyer", name: "Surtr the Fire Lord", role: "BOSS - Fire giant king", difficulty: "Boss", description: "The ruler of Muspelheim wielding a flaming greatsword. Towers over all with a crown of eternal flame.", inspiration: "Surtr / Ragnarok" },
+  { id: "burial-wight", name: "Burial Wight", role: "Slow shambler", difficulty: "Easy", description: "A decayed corpse dragged from a barrow mound, wrapped in tattered grave-cloth. Lunges with bony claws.", inspiration: "Norse burial mounds" },
+  { id: "ice-sprite", name: "Ice Sprite", role: "Small ranged nuisance", difficulty: "Easy", description: "A tiny mischievous frost spirit with crystalline wings. Pelts intruders with shards of ice.", inspiration: "Nordic frost faeries" },
+  { id: "einherjar-ghost", name: "Einherjar Ghost", role: "Armored melee", difficulty: "Easy-Medium", description: "The faded spirit of a Valhalla warrior. Still clad in spectral armor and wielding a translucent sword.", inspiration: "Valhalla / Einherjar" },
+  { id: "mire-serpent", name: "Mire Serpent", role: "Ambush striker", difficulty: "Medium", description: "A venomous marsh snake that lurks half-submerged. Strikes with blinding speed and retreats into murky water.", inspiration: "Norse swamp beasts" },
+  { id: "norns-shade", name: "Norn Shade", role: "Debuff caster", difficulty: "Medium", description: "A ghostly echo of the fate-weavers. Wraps enemies in threads of destiny that slow and weaken them.", inspiration: "The Norns / Fate" },
 ]
 
 // ============================================================
