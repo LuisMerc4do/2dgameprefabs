@@ -7,6 +7,10 @@ import {
   HEAD_STYLES,
   CHEST_STYLES,
   LEG_STYLES,
+  BEARD_STYLES,
+  EYE_COLORS,
+  SCAR_OPTIONS,
+  FACE_PAINT_OPTIONS,
 } from "@/lib/sprite-data"
 import type { CharacterConfig } from "@/lib/sprite-renderer"
 
@@ -170,6 +174,86 @@ export function CharacterCustomizer({ config, onChange }: CharacterCustomizerPro
           </div>
         </div>
       )}
+
+      {/* Beard Style */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-medium text-muted-foreground">Beard Style</label>
+        <div className="flex gap-2 flex-wrap">
+          {BEARD_STYLES.map((bs) => (
+            <button
+              key={bs.id}
+              onClick={() => onChange({ ...config, beardStyle: bs.id })}
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                (config.beardStyle || "none") === bs.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-accent"
+              }`}
+            >
+              {bs.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Eye Color */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-medium text-muted-foreground">Eye Color</label>
+        <div className="flex gap-2 flex-wrap">
+          {EYE_COLORS.map((ec) => (
+            <button
+              key={ec.id}
+              onClick={() => onChange({ ...config, eyeColor: ec.color })}
+              className={`w-8 h-8 rounded-full border-2 transition-all ${
+                (config.eyeColor || "#4A2A1A") === ec.color
+                  ? "border-primary scale-110"
+                  : "border-border hover:border-muted-foreground"
+              }`}
+              style={{ backgroundColor: ec.color }}
+              title={ec.name}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Scars */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-medium text-muted-foreground">Battle Scars</label>
+        <div className="flex gap-2 flex-wrap">
+          {SCAR_OPTIONS.map((sc) => (
+            <button
+              key={sc.id}
+              onClick={() => onChange({ ...config, scarStyle: sc.id })}
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                (config.scarStyle || "none") === sc.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-accent"
+              }`}
+            >
+              {sc.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Face Paint */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-medium text-muted-foreground">War Paint</label>
+        <div className="flex gap-2 flex-wrap">
+          {FACE_PAINT_OPTIONS.map((fp) => (
+            <button
+              key={fp.id}
+              onClick={() => onChange({ ...config, facePaint: fp.id })}
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                (config.facePaint || "none") === fp.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-accent"
+              }`}
+            >
+              {fp.name}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
